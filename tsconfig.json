@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "ES2020", // 동적 가져오기 사용하기 위함
+    "target": "ESNext", // 컴파일되는 js 버전
+    "jsx": "react-jsx", // jsx변환 방법
+    "strict": true, // 타입 검사는 여러 항목이 있는데 그 모든 항목을 검사하겠다는 의미
+    "allowSyntheticDefaultImports": true, // 일부 라이브러리에는 export default를 사용하지 않음.
+    "moduleResolution": "node", // node.js 모듈 해석 규칙을 따른다. = node_modules에서 모듈을 찾는다. classic도 있는데 현재 위치에서 파일을 찾는다.
+    "jsxImportSource": "@emotion/react",
+    "types": ["@emotion/react/types/css-prop"] // css prop을 사용하기 위해 추가
+  },
+  "include": ["src", ".storybook/preview.tsx"], // .storybook에 있는 tsx도 컴파일 범위에 넣어 React모르겠다는 오류가 안뜨도록 한다.
+  "exclude": ["node_modules"]
+}
