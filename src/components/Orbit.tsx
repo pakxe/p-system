@@ -1,9 +1,9 @@
 import { useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
+import { RefObject, useRef } from 'react';
 import { BufferGeometry, Line, Mesh, Vector3 } from 'three';
 
 interface OrbitProps {
-  planetRef?: React.RefObject<Mesh>; // 행성의 위치를 참조
+  planetRef?: RefObject<Mesh>; // 행성의 위치를 참조
   radius: number; // 궤도의 반지름
 }
 

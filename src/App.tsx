@@ -1,15 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { css } from '@emotion/react';
 import * as THREE from 'three';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import ExpandingCircle from './components/ExpandingCircle';
-import SkyDome from './components/SkyDome';
 import Orbit from './components/Orbit';
-import Planet from './components/Planet/Planet';
+import Planet from './components/Planet';
 import CameraMover from './components/CameraMover';
-import Stars from './components/Stars';
-import { TPlanet } from './types';
 import { planets } from './datas/planets';
 import Lights from './components/Lights';
 import SpaceBackground from './components/SpaceBackground';
