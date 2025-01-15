@@ -7,9 +7,9 @@ function SkyDome() {
 
   const gradientMaterial = useMemo(() => {
     const uniforms = {
-      color1: { value: new THREE.Color('#b4f4f5') },
-      color2: { value: new THREE.Color('#b4f4f5') },
-      color3: { value: new THREE.Color('#eee7fc') },
+      color1: { value: new THREE.Color('#042a32') },
+      color2: { value: new THREE.Color('#505050') },
+      color3: { value: new THREE.Color('#0c2b7b') },
     };
 
     return new THREE.ShaderMaterial({
