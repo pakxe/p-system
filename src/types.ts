@@ -17,7 +17,7 @@ export type TPlanet = TSystemObject & {
   satellites?: TSatellite[];
 };
 
-export type TSatellite = Omit<TPlanet, 'satellites' | 'orbitalCenter'> & {};
+export type TSatellite = Omit<TPlanet, 'satellites' | 'orbitalCenter'>;
 
 export type TOrbit = {
   orbitalCenter: OrbitalCenter;
