@@ -31,12 +31,13 @@ function Planet({
   rotationSpeed,
   axialTilt,
 }: Props) {
-  const planetMeshRef = useRef<Mesh>(null);
   const [hovered, setHover] = useState(false);
 
+  const planetMeshRef = useRef<Mesh>(null);
   const modalRef = useRef<Mesh>(null);
-
   const angleRef = useRef(0);
+
+  const axialTiltRadians = useRef((axialTilt * Math.PI) / 180);
 
   useFrame(() => {
     // 행성과 모달 위치 계산 프레임
@@ -53,11 +54,11 @@ function Planet({
     planetMeshRef.current.position.set(x, 0, z); // 반영
 
     // 자전
-    planetMeshRef.current.rotation.x = (axialTilt * Math.PI) / 180;
+    planetMeshRef.current.rotation.x = axialTiltRadians.current;
     planetMeshRef.current.rotation.y += rotationSpeed;
 
     // 행성 모달 위치. 행성의 오른쪽에 위치
-    if (modalRef.current) modalRef?.current.position.set(x - 7, 0, z);
+    if (modalRef.current) modalRef.current.position.set(x - 7, 0, z);
   });
 
   return (
