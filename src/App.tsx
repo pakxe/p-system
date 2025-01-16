@@ -50,7 +50,6 @@ function App() {
               mainColor={planet.mainColor}
               planetRadius={planet.planetRadius}
               orbitalSpeed={planet.orbitalSpeed}
-              orbitalCenter={new THREE.Vector3(0, 0, 0)}
               orbitalRadius={planet.orbitalRadius}
               rotationSpeed={0.01}
               onExplore={() => setIsExplore(true)} // 탐험하기 버튼 클릭 처리
