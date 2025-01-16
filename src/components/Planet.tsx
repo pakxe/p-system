@@ -1,5 +1,5 @@
 import { RefObject, useRef, useState } from 'react';
-import { Vector3 } from 'three';
+import { Mesh, Vector3 } from 'three';
 import Model from './Model';
 import { Html } from '@react-three/drei';
 import Orbit from './Orbit';
@@ -29,6 +29,7 @@ function Planet({
   centerRef,
   onExplore,
   rotationSpeed,
+  axialTilt,
 }: Props) {
   const planetMeshRef = useRef<Mesh>(null);
   const [hovered, setHover] = useState(false);
@@ -52,7 +53,7 @@ function Planet({
     planetMeshRef.current.position.set(x, 0, z); // 반영
 
     // 자전
-    planetMeshRef.current.rotation.x = (23.5 * Math.PI) / 180;
+    planetMeshRef.current.rotation.x = (axialTilt * Math.PI) / 180;
     planetMeshRef.current.rotation.y += rotationSpeed;
 
     // 행성 모달 위치. 행성의 오른쪽에 위치
