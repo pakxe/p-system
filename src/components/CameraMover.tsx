@@ -22,7 +22,7 @@ function CameraMover({ selectedSystemObjectRef, isExplore }: Props) {
     // Ref도 초기 위치로 설정
     currentPos.current.copy(solarSystemViewPosition);
     currentLookAt.current.copy(solarSystemLookAt);
-  }, [camera]);
+  }, []);
 
   useFrame(() => {
     // 선택된 오브젝트가 없을 때는 계를 비춘다.
