@@ -11,6 +11,7 @@ export type TSystemObject = {
   orbitalSpeed: number; // 각속도임
   rotationSpeed: number;
   orbitalCenter: OrbitalCenter;
+  axialTilt: number; // 각도. 라디안 아님
 };
 
 export type TPlanet = TSystemObject & {
