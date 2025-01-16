@@ -1,6 +1,8 @@
 import { Vector3 } from 'three';
 import { TPlanet } from '../types';
 
+const DEFAULT_ORBITAL_CENTER = new Vector3(0, 0, 0);
+
 export const planets: TPlanet[] = [
   {
     name: 'Mercury',
@@ -9,7 +11,7 @@ export const planets: TPlanet[] = [
     orbitalRadius: 2.5,
     orbitalSpeed: 0.02,
     rotationSpeed: 0.01,
-    orbitalCenter: new Vector3(0, 0, 0),
+    orbitalCenter: DEFAULT_ORBITAL_CENTER,
     axialTilt: 0,
   },
   {
@@ -19,7 +21,7 @@ export const planets: TPlanet[] = [
     orbitalRadius: 3.5,
     orbitalSpeed: 0.015,
     rotationSpeed: 0.01,
-    orbitalCenter: new Vector3(0, 0, 0),
+    orbitalCenter: DEFAULT_ORBITAL_CENTER,
     axialTilt: 177.4,
   },
   {
@@ -29,7 +31,7 @@ export const planets: TPlanet[] = [
     orbitalRadius: 5,
     orbitalSpeed: 0.01,
     rotationSpeed: 0.01,
-    orbitalCenter: new Vector3(0, 0, 0),
+    orbitalCenter: DEFAULT_ORBITAL_CENTER,
     axialTilt: 23.5,
     satellites: [
       {
@@ -59,7 +61,7 @@ export const planets: TPlanet[] = [
     orbitalRadius: 7,
     orbitalSpeed: 0.008,
     rotationSpeed: 0.01,
-    orbitalCenter: new Vector3(0, 0, 0),
+    orbitalCenter: DEFAULT_ORBITAL_CENTER,
     axialTilt: 25.19,
   },
   {
@@ -69,7 +71,7 @@ export const planets: TPlanet[] = [
     orbitalRadius: 10,
     orbitalSpeed: 0.005,
     rotationSpeed: 0.01,
-    orbitalCenter: new Vector3(0, 0, 0),
+    orbitalCenter: DEFAULT_ORBITAL_CENTER,
     axialTilt: 3.13,
   },
 ];
