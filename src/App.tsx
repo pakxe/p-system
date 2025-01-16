@@ -17,6 +17,12 @@ function App() {
   const [targetName, setTargetName] = useState<string | null>(null); // 클릭된 행성 이름
   const [isExplore, setIsExplore] = useState(false);
 
+  const clearSelectedState = () => {
+    setSelectedSystemObjectRef(null);
+    setTargetName(null);
+    setIsExplore(false);
+  };
+
   return (
     <div
       css={css`
@@ -24,11 +30,7 @@ function App() {
         height: 100vh;
         position: relative;
       `}
-      onWheel={() => {
-        setSelectedSystemObjectRef(null);
-        setIsExplore(false);
-        setTargetName(null);
-      }}>
+      onWheel={clearSelectedState}>
       {/* 탐험 시작하면 페이지 전환 효과 */}
       {isExplore && <ExpandingCircle color={planets.find((planet) => planet.name === targetName)?.mainColor} />}
 
@@ -76,10 +78,7 @@ function App() {
 
           z-index: 100;
         `}
-        onClick={() => {
-          setIsExplore(false);
-          setSelectedSystemObjectRef(null);
-        }}>
+        onClick={clearSelectedState}>
         system으로 돌아가기
       </button>
     </div>
