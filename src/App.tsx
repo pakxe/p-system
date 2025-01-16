@@ -1,74 +1,27 @@
-// function Box(props: ThreeElements['mesh']) {
-//   const meshRef = useRef<THREE.Mesh>(null!);
-//   const [hovered, setHover] = useState(false);
-//   const [active, setActive] = useState(false);
-//   useFrame((state, delta) => (meshRef.current.rotation.x += delta));
-//   return (
-//     <mesh
-//       {...props}
-//       ref={meshRef}
-//       scale={active ? 1.5 : 1}
-//       onClick={(event) => setActive(!active)}
-//       onPointerOver={(event) => setHover(true)}
-//       onPointerOut={(event) => setHover(false)}>
-//       <boxGeometry args={[1, 1, 1]} />
-//       <meshStandardMaterial color={hovered ? 'hotpink' : '#2f74c0'} />
-//     </mesh>
-//   );
-// }
-
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { css } from '@emotion/react';
 import * as THREE from 'three';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import ExpandingCircle from './components/ExpandingCircle';
-import SkyDome from './components/SkyDome';
-import { SatelliteProps } from './components/Satellite';
 import Orbit from './components/Orbit';
 import Planet from './components/Planet';
 import CameraMover from './components/CameraMover';
-import Stars from './components/Stars';
-
-// planet 데이터의 타입 정의
-type PlanetData = {
-  name: string;
-  color: string;
-  radius: number; // 궤도 반지름
-  speed: number; // 회전 속도
-  satellites?: SatelliteProps[]; // 위성 배열
-};
+import { planets } from './datas/planets';
+import Lights from './components/Lights';
+import SpaceBackground from './components/SpaceBackground';
 
 // App 컴포넌트
 function App() {
-  const [targetRef, setTargetRef] = useState<React.RefObject<THREE.Mesh> | null>(null);
-  const [isUserInteracting, setIsUserInteracting] = useState(true); // 사용자 조작 여부 상태
+  const [selectedSystemObjectRef, setSelectedSystemObjectRef] = useState<React.RefObject<THREE.Mesh> | null>(null);
   const [targetName, setTargetName] = useState<string | null>(null); // 클릭된 행성 이름
-  const [exploreTarget, setExploreTarget] = useState<THREE.Vector3 | null>(null);
+  const [isExplore, setIsExplore] = useState(false);
 
-  const planets: PlanetData[] = [
-    { name: 'Mercury', color: 'gray', radius: 3, speed: 0.02 },
-    { name: 'Venus', color: 'yellow', radius: 5, speed: 0.015 },
-    {
-      name: 'Earth',
-      color: 'blue',
-      radius: 7,
-      speed: 0.01,
-      satellites: [
-        { color: 'gray', radius: 2, speed: 0.02 },
-        { color: 'white', radius: 3, speed: 0.015 },
-      ],
-    },
-    { name: 'Mars', color: 'red', radius: 9, speed: 0.008 },
-    { name: 'Jupiter', color: 'pink', radius: 11, speed: 0.005 },
-  ];
-
-  useEffect(() => {
-    if (isUserInteracting) {
-      setTargetRef(null); // 사용자 조작 중에는 타겟을 null로 설정
-      setTargetName(null);
-    }
-  }, [isUserInteracting]);
+  const clearSelectedState = () => {
+    setSelectedSystemObjectRef(null);
+    setTargetName(null);
+    setIsExplore(false);
+  };
 
   return (
     <div
@@ -77,37 +30,32 @@ function App() {
         height: 100vh;
         position: relative;
       `}
-      onWheel={() => {
-        setIsUserInteracting(true);
-      }}>
-      {exploreTarget && <ExpandingCircle color={planets.find((planet) => planet.name === targetName)?.color} />}
+      onWheel={clearSelectedState}>
+      {/* 탐험 시작하면 페이지 전환 효과 */}
+      {isExplore && <ExpandingCircle color={planets.find((planet) => planet.name === targetName)?.mainColor} />}
 
       <Canvas
-        onCreated={({ scene }) => {
-          // CanvasTexture를 배경으로 설정
-          // const gradientTexture = createGradientTexture();
-          // scene.background = gradientTexture;
-        }}
         camera={{
           near: 1,
           far: 5000, // 먼 거리까지 렌더링
         }}>
-        <SkyDome />
-        <Stars />
-        <ambientLight intensity={1} /> {/* 기본 조명 */}
-        <pointLight position={[10, 10, 10]} intensity={1} /> {/* 방향성 조명 */}
-        <directionalLight position={[-100, 10, -50]} intensity={1} /> {/* 추가 조명 */}
+        <SpaceBackground />
+        <Lights />
         {/* 행성 렌더링 */}
         {planets.map((planet, index) => (
           <group key={index}>
-            <Orbit radius={planet.radius} />
+            <Orbit radius={planet.orbitalRadius} />
             <Planet
               {...planet}
-              onExplore={(position) => setExploreTarget(position)} // 탐험하기 버튼 클릭 처리
+              mainColor={planet.mainColor}
+              planetRadius={planet.planetRadius}
+              orbitalSpeed={planet.orbitalSpeed}
+              orbitalRadius={planet.orbitalRadius}
+              rotationSpeed={0.01}
+              onExplore={() => setIsExplore(true)} // 탐험하기 버튼 클릭 처리
               onClick={(ref) => {
-                setExploreTarget(null);
-                setTargetRef(ref); // 클릭된 행성의 ref를 설정
-                setIsUserInteracting(false);
+                setIsExplore(false);
+                setSelectedSystemObjectRef(ref); // 클릭된 행성의 ref를 설정
                 setTargetName(planet.name);
               }}
               targetName={targetName}
@@ -115,14 +63,10 @@ function App() {
             />
           </group>
         ))}
-        <CameraMover exploreTarget={exploreTarget} targetRef={targetRef} isUserInteracting={isUserInteracting} />
-        {/* <axesHelper args={[5]} /> */}
-        <EffectComposer>
-          <Bloom
-            intensity={0.3} // Bloom 강도
-            luminanceThreshold={0.7} // 빛나는 영역의 밝기 임계값
-            luminanceSmoothing={0.5} // 부드럽게 만드는 정도
-          />
+        <CameraMover isExplore={isExplore} selectedSystemObjectRef={selectedSystemObjectRef} />
+        <EffectComposer multisampling={8}>
+          <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.6} />
+          <Bloom kernelSize={4} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
         </EffectComposer>
       </Canvas>
       <button
@@ -133,11 +77,7 @@ function App() {
 
           z-index: 100;
         `}
-        onClick={() => {
-          setExploreTarget(null);
-          setTargetRef(null);
-          setIsUserInteracting(true);
-        }}>
+        onClick={clearSelectedState}>
         system으로 돌아가기
       </button>
     </div>

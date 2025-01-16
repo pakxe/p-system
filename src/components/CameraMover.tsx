@@ -1,17 +1,14 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
-import { Mesh, Vector3 } from 'three';
+import { Mesh, PerspectiveCamera, Vector3 } from 'three';
 
-function CameraMover({
-  targetRef,
-  exploreTarget,
-  isUserInteracting,
-}: {
-  targetRef: React.RefObject<Mesh>;
-  exploreTarget?: Vector3;
-  isUserInteracting?: boolean;
-}) {
-  const { camera } = useThree();
+type Props = {
+  selectedSystemObjectRef: React.RefObject<Mesh> | null;
+  isExplore: boolean;
+};
+
+function CameraMover({ selectedSystemObjectRef, isExplore }: Props) {
+  const { camera }: { camera: PerspectiveCamera } = useThree();
   const currentPos = useRef(camera.position.clone());
   const currentLookAt = useRef(new Vector3(0, 0, 0)); // 카메라 현재 시선
   const lerpSpeed = 0.04; // 부드러운 이동 속도
@@ -25,10 +22,11 @@ function CameraMover({
     // Ref도 초기 위치로 설정
     currentPos.current.copy(solarSystemViewPosition);
     currentLookAt.current.copy(solarSystemLookAt);
-  }, [camera]);
+  }, []);
 
   useFrame(() => {
-    if (isUserInteracting) {
+    // 선택된 오브젝트가 없을 때는 계를 비춘다.
+    if (selectedSystemObjectRef === null) {
       if (camera.fov < 75) {
         // 초기 FOV 값으로 복원
         camera.fov += (75 - camera.fov) * lerpSpeed; // fov 부드럽게 증가
@@ -43,11 +41,11 @@ function CameraMover({
       return;
     }
 
-    if (!targetRef?.current) return;
+    if (!selectedSystemObjectRef.current) return;
 
-    const targetPosition = targetRef.current.position;
+    const targetPosition = selectedSystemObjectRef.current.position;
 
-    if (exploreTarget) {
+    if (isExplore) {
       // 최소 거리 이상일 때만 이동
       const zoomedTargetVector = new Vector3(
         targetPosition.x,
