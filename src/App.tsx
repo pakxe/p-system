@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { RefObject, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { css } from '@emotion/react';
 import * as THREE from 'three';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import ExpandingCircle from './components/ExpandingCircle';
-import Orbit from './components/Orbit';
 import Planet from './components/Planet';
 import CameraMover from './components/CameraMover';
 import { planets } from './datas/planets';
 import Lights from './components/Lights';
 import SpaceBackground from './components/SpaceBackground';
+import Star from './components/Star';
 
 // App 컴포넌트
 function App() {
@@ -21,6 +21,16 @@ function App() {
     setSelectedSystemObjectRef(null);
     setTargetName(null);
     setIsExplore(false);
+  };
+
+  const onExplore = () => {
+    setIsExplore(true);
+  };
+
+  const onSelect = (ref: RefObject<THREE.Mesh>, name: string) => {
+    setIsExplore(false);
+    setSelectedSystemObjectRef(ref); // 클릭된 행성의 ref를 설정
+    setTargetName(name);
   };
 
   return (
@@ -42,24 +52,19 @@ function App() {
         <SpaceBackground />
         <Lights />
         {/* 행성 렌더링 */}
+        <Star {...planets[0]} axialTilt={20} modelName='s' onClick={onSelect} onExplore={onExplore} />
         {planets.map((planet, index) => (
           <group key={index}>
-            <Orbit radius={planet.orbitalRadius} />
             <Planet
               {...planet}
               mainColor={planet.mainColor}
-              planetRadius={planet.planetRadius}
+              objectRadius={planet.objectRadius}
               orbitalSpeed={planet.orbitalSpeed}
               orbitalRadius={planet.orbitalRadius}
               rotationSpeed={0.01}
-              onExplore={() => setIsExplore(true)} // 탐험하기 버튼 클릭 처리
-              onClick={(ref) => {
-                setIsExplore(false);
-                setSelectedSystemObjectRef(ref); // 클릭된 행성의 ref를 설정
-                setTargetName(planet.name);
-              }}
+              onExplore={onExplore}
+              onClick={onSelect}
               targetName={targetName}
-              onHover={(name) => console.log(name)}
             />
           </group>
         ))}
@@ -68,6 +73,7 @@ function App() {
           <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.6} />
           <Bloom kernelSize={4} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
         </EffectComposer>
+        <axesHelper />
       </Canvas>
       <button
         css={css`
