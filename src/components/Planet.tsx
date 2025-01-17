@@ -46,7 +46,7 @@ function Planet({
     if (!planetRef.current) return;
 
     // 행성 모달 위치. 행성의 오른쪽에 위치
-    if (modalRef.current) modalRef.current.position.set(location.current.x - 7, 0, location.current.z);
+    if (modalRef.current) modalRef.current.position.set(location.current.x + 7, 1, location.current.z);
   });
 
   return (
@@ -88,13 +88,8 @@ function Planet({
       {/* 모달 렌더링 */}
       {targetName === name && (
         <group>
-          <mesh ref={modalRef} position={[0, 0, 0]} rotation={[0.25, -Math.PI / 4, 0]}>
-            <Html
-              position={[0, -1, 0]}
-              center
-              style={{
-                transform: 'translate(-20%, -30%)',
-              }}>
+          <mesh ref={modalRef} rotation={[0.25, -Math.PI / 4, 0]}>
+            <Html>
               <SystemObjectInfoModal
                 name={name}
                 planetMeshRef={planetRef}
