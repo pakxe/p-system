@@ -1,6 +1,6 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
-import { Mesh, PerspectiveCamera, Vector3 } from 'three';
+import { Clock, Mesh, PerspectiveCamera, Quaternion, Vector3 } from 'three';
 
 type Props = {
   selectedSystemObjectRef: React.RefObject<Mesh> | null;
@@ -12,7 +12,7 @@ function CameraMover({ selectedSystemObjectRef, isExplore }: Props) {
   const currentPos = useRef(camera.position.clone());
   const currentLookAt = useRef(new Vector3(0, 0, 0)); // 카메라 현재 시선
   const lerpSpeed = 0.04; // 부드러운 이동 속도
-  const solarSystemViewPosition = new Vector3(-15, 15, -15); // 태양계를 보는 위치 (적절히 조정 가능)
+  const solarSystemViewPosition = new Vector3(0, 14, 14); // 태양계를 보는 위치 (적절히 조정 가능)
   const solarSystemLookAt = new Vector3(0, 0, 0); // 태양계를 중심으로 시선 고정
 
   useEffect(() => {
@@ -36,7 +36,7 @@ function CameraMover({ selectedSystemObjectRef, isExplore }: Props) {
       currentPos.current.lerp(solarSystemViewPosition, lerpSpeed);
       camera.position.copy(currentPos.current);
 
-      currentLookAt.current.lerp(solarSystemLookAt, lerpSpeed);
+      currentLookAt.current.lerp(solarSystemLookAt, 0.04);
       camera.lookAt(currentLookAt.current.x, currentLookAt.current.y, currentLookAt.current.z);
       return;
     }
@@ -61,21 +61,24 @@ function CameraMover({ selectedSystemObjectRef, isExplore }: Props) {
         camera.updateProjectionMatrix();
       }
 
-      // 타겟 중심을 계속 바라보도록 설정
-      camera.lookAt(targetPosition.x, targetPosition.y, targetPosition.z);
+      const target = camera.clone();
+      currentLookAt.current.lerp(targetPosition, 1);
+      target.lookAt(currentLookAt.current.x, currentLookAt.current.y, currentLookAt.current.z);
+
+      camera.quaternion.slerp(target.quaternion, 0.35);
 
       return;
     }
 
     // 카메라 위치를 타겟 궤도로 부드럽게 이동
-    const targetVector = new Vector3(targetPosition.x, targetPosition.y + 5, targetPosition.z - 10);
+    const targetVector = new Vector3(targetPosition.x, targetPosition.y + 3, targetPosition.z + 10);
     currentPos.current.lerp(targetVector, lerpSpeed);
     camera.position.copy(currentPos.current);
 
     // 정확히 타겟 중심을 바라보도록 수정
     currentLookAt.current.lerp(targetPosition, lerpSpeed);
     camera.lookAt(
-      currentLookAt.current.x - 4,
+      currentLookAt.current.x + 4,
       currentLookAt.current.y,
       currentLookAt.current.z, // 정확한 중심 좌표 사용
     );
