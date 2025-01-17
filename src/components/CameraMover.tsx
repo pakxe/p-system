@@ -62,7 +62,7 @@ function CameraMover({ selectedSystemObjectRef, isExplore }: Props) {
       }
 
       const target = camera.clone();
-      currentLookAt.current.lerp(targetPosition, 1);
+      currentLookAt.current.copy(selectedSystemObjectRef.current.position);
       target.lookAt(currentLookAt.current.x, currentLookAt.current.y, currentLookAt.current.z);
 
       camera.quaternion.slerp(target.quaternion, 0.35);
