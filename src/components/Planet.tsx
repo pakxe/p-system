@@ -30,6 +30,7 @@ function Planet({
   rotationSpeed,
   axialTilt,
   centerRef,
+  mainColor,
   objectRadius,
 }: Props) {
   const [hovered, setHover] = useState(false);
@@ -72,6 +73,7 @@ function Planet({
           <>
             <sphereGeometry args={[objectRadius, 32, 32]} />
             <meshStandardMaterial
+              color={mainColor}
               emissive='#ffffff' // 발광 색상
               emissiveIntensity={0.2} // 발광 강도
             />
