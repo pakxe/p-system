@@ -1,23 +1,24 @@
 import { RefObject, useRef, useState } from 'react';
 import { Mesh, Vector3 } from 'three';
-import Model from './Model';
 import { Html } from '@react-three/drei';
 import Orbit from './Orbit';
 import { TPlanet } from '../types';
 import SystemObjectInfoModal from './SystemObjectInfoModal/SystemObjectInfoModal';
 import { useFrame } from '@react-three/fiber';
+import useRotation from '../hooks/useRotation';
+import useOrbit from '../hooks/useOrbit';
+import Satellite from './Satellite';
 
 type Props = TPlanet & {
   targetName?: string | null;
   centerRef?: React.RefObject<Mesh>;
 
   onHover?: (name: string | null) => void;
-  onClick?: (ref: RefObject<Mesh>) => void;
+  onClick?: (ref: RefObject<Mesh>, name: string) => void;
   onExplore?: () => void;
 };
 
 function Planet({
-  mainColor,
   name,
   onClick,
   onHover,
@@ -25,49 +26,36 @@ function Planet({
   orbitalRadius,
   satellites,
   targetName,
-  planetRadius,
-  centerRef,
   onExplore,
   rotationSpeed,
   axialTilt,
+  centerRef,
+  objectRadius,
 }: Props) {
   const [hovered, setHover] = useState(false);
 
-  const planetMeshRef = useRef<Mesh>(null);
+  const planetRef = useRef<Mesh>(null);
   const modalRef = useRef<Mesh>(null);
-  const angleRef = useRef(0);
 
-  const axialTiltRadians = useRef((axialTilt * Math.PI) / 180);
+  const location = useOrbit({ planetRef: planetRef, orbitalSpeed, centerRef, orbitalRadius });
+  useRotation({ planetRef, axialTilt, rotationSpeed });
 
   useFrame(() => {
     // 행성과 모달 위치 계산 프레임
-    if (!planetMeshRef.current) return;
-
-    angleRef.current += orbitalSpeed; // 각속도 +
-
-    const centerX = centerRef?.current?.position.x ?? 0;
-    const centerZ = centerRef?.current?.position.z ?? 0;
-
-    const x = centerX + orbitalRadius * Math.cos(angleRef.current);
-    const z = centerZ + orbitalRadius * Math.sin(angleRef.current);
-
-    planetMeshRef.current.position.set(x, 0, z); // 반영
-
-    // 자전
-    planetMeshRef.current.rotation.x = axialTiltRadians.current;
-    planetMeshRef.current.rotation.y += rotationSpeed;
+    if (!planetRef.current) return;
 
     // 행성 모달 위치. 행성의 오른쪽에 위치
-    if (modalRef.current) modalRef.current.position.set(x - 7, 0, z);
+    if (modalRef.current) modalRef.current.position.set(location.current.x - 7, 0, location.current.z);
   });
 
   return (
     <group>
+      <Orbit radius={orbitalRadius} />
       {/* 행성 렌더링 */}
       <mesh
-        ref={planetMeshRef}
+        ref={planetRef}
         onClick={() => {
-          if (onClick) onClick(planetMeshRef);
+          if (onClick) onClick(planetRef, name);
         }}
         onPointerOver={() => {
           if (onHover) onHover(name);
@@ -78,12 +66,12 @@ function Planet({
           if (onHover) onHover(null);
         }}>
         {name === 'Earth' ? (
-          <Model />
+          // <Model />
+          <></>
         ) : (
           <>
-            <sphereGeometry args={[planetRadius, 32, 32]} />
+            <sphereGeometry args={[objectRadius, 32, 32]} />
             <meshStandardMaterial
-              color={hovered ? 'white' : mainColor}
               emissive='#ffffff' // 발광 색상
               emissiveIntensity={0.2} // 발광 강도
             />
@@ -93,18 +81,7 @@ function Planet({
 
       {/* 위성 렌더링 */}
       {satellites &&
-        satellites.map((satellite, index) => (
-          <group key={index}>
-            <Orbit planetRef={planetMeshRef} radius={satellite.orbitalRadius} />
-            <Planet
-              {...satellite}
-              centerRef={planetMeshRef}
-              orbitalCenter={
-                new Vector3(planetMeshRef.current?.position.x || 0, 0, planetMeshRef.current?.position.z || 0)
-              }
-            />
-          </group>
-        ))}
+        satellites.map((satellite) => <Satellite key={satellite.name} {...satellite} centerRef={planetRef} />)}
 
       {/* 모달 렌더링 */}
       {targetName === name && (
@@ -118,7 +95,7 @@ function Planet({
               }}>
               <SystemObjectInfoModal
                 name={name}
-                planetMeshRef={planetMeshRef}
+                planetMeshRef={planetRef}
                 onExplore={() => {
                   if (onExplore) onExplore();
                 }}
