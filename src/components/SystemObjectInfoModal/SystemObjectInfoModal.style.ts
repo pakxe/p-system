@@ -65,12 +65,6 @@ const modalContainerStyle = css`
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1), 0px 6px 10px rgba(0, 0, 0, 0.05), 0px 10px 15px rgba(0, 0, 0, 0.03);
   transform-style: preserve-3d;
   transform: rotateX(5deg) rotateY(-5deg); /* 카드에 약간의 입체감을 줌 */
-
-  &:hover {
-    transform: rotateX(0deg) rotateY(0deg) scale(1.03); /* 호버 시 정면으로 */
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2), 0px 10px 20px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
 `;
 
 const SystemObjectInfoModalStyle = {
