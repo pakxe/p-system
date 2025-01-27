@@ -1,9 +1,9 @@
 const Lights = () => {
   return (
     <>
-      <ambientLight intensity={1} /> {/* 기본 조명 */}
-      <pointLight position={[10, 10, 10]} intensity={1} /> {/* 방향성 조명 */}
-      <directionalLight position={[-10, 10, -10]} intensity={3} /> {/* 추가 조명 */}
+      <ambientLight intensity={1} /> {/* 환경광 */}
+      <pointLight position={[1, 1, 1]} intensity={100} color='white' distance={500} power={250} decay={0.5} />
+      <hemisphereLight intensity={0.5} />
     </>
   );
 };

@@ -8,6 +8,7 @@ import { useFrame } from '@react-three/fiber';
 import useRotation from '../hooks/useRotation';
 import useOrbit from '../hooks/useOrbit';
 import Satellite from './Satellite';
+import { EffectComposer, Outline } from '@react-three/postprocessing';
 
 type Props = TPlanet & {
   targetName?: string | null;
@@ -106,7 +107,7 @@ function Planet({
           </mesh>
         </group>
       )}
-    </group>
+  </group>
   );
 }
 

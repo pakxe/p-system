@@ -3,7 +3,6 @@ import { Canvas } from '@react-three/fiber';
 import { css } from '@emotion/react';
 import * as THREE from 'three';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
-import ExpandingCircle from './components/ExpandingCircle';
 import Planet from './components/Planet';
 import CameraMover from './components/CameraMover';
 import { planets } from './datas/planets';
@@ -42,6 +41,7 @@ function App() {
       `}
       onWheel={clearSelectedState}>
       {/* 탐험 시작하면 페이지 전환 효과 */}
+      {/* {isExplore && <ExpandingCircle color={system.planets.find((planet) => planet.name === targetName)?.mainColor} />} */}
       {isExplore && <ExpandingCircle color={planets.find((planet) => planet.name === targetName)?.mainColor} />}
 
       <Canvas
@@ -68,10 +68,25 @@ function App() {
             />
           </group>
         ))}
+        {/* <mesh ref={ref}>
+          <sphereGeometry args={[3, 32, 32]} />
+          <meshStandardMaterial
+            emissive='#ffffff' // 발광 색상
+            emissiveIntensity={0.2} // 발광 강도
+          />
+        </mesh> */}
         <CameraMover isExplore={isExplore} selectedSystemObjectRef={selectedSystemObjectRef} />
-        <EffectComposer multisampling={8}>
-          <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.6} />
-          <Bloom kernelSize={4} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
+        <EffectComposer autoClear={false}>
+          <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.1} intensity={0.6} />
+          <Bloom kernelSize={5} luminanceThreshold={0} luminanceSmoothing={0} intensity={1} />
+          {/* <Outline
+            // selection={ref}
+            visibleEdgeColor={0xfaa000} // the color of visible edges
+            edgeThickness={1}
+            edgeStrength={10}
+            blur={true}
+            kernelSize={4}
+          /> */}
         </EffectComposer>
         <axesHelper />
       </Canvas>

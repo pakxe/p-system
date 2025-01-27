@@ -13,5 +13,9 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    host: '172.20.10.11',
+    port: 3000,
+  },
   assetsInclude: ['**/*.gltf', '**/*.glb'],
 });
