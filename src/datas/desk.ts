@@ -1,11 +1,13 @@
+import { VECTOR_3 } from '../types';
+
 type Part = {
   name: string;
   id: number;
-  position?: [number, number, number];
-  targetPosition?: [number, number, number];
-  direction?: [number, number, number];
+  position?: VECTOR_3;
+  targetPosition?: VECTOR_3;
+  direction?: VECTOR_3;
   length?: number;
-  rotation?: [number, number, number];
+  rotation?: VECTOR_3;
 };
 
 type Step = {

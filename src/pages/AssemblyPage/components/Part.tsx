@@ -2,21 +2,22 @@ import * as THREE from 'three';
 import { useSpring, animated } from '@react-spring/three';
 import Arrow from '../../../components/Arrow';
 import useDuplicatedModel from '../../../hooks/useDuplicatedModel';
+import { VECTOR_3 } from '../../../types';
 
 type Props = {
   name: string; // glb 모델 파일명
 
-  direction?: [number, number, number]; // 화살표 방향
+  direction?: VECTOR_3; // 화살표 방향
   length?: number; // 화살표 길이
   color?: string; // 화살표 색상
   coneSize?: number; // 화살표 머리 크기
   arrowThickness?: number; // 화살표 줄기의 두께
 
-  position?: [number, number, number]; // 이동 전 위치
-  targetPosition?: [number, number, number]; // 이동 후 위치
+  position?: VECTOR_3; // 이동 전 위치
+  targetPosition?: VECTOR_3; // 이동 후 위치
   isMoved?: boolean; // 이둥 상태
 
-  rotation?: [number, number, number]; // 회전 각도 (라디안 단위)
+  rotation?: VECTOR_3; // 회전 각도 (라디안 단위)
 };
 
 function Part({
@@ -24,7 +25,7 @@ function Part({
   direction,
   length,
   position = [0, 0, 0],
-  targetPosition, // 기본 목표 위치
+  targetPosition,
   isMoved = false,
   rotation = [0, 0, 0],
 }: Props) {
