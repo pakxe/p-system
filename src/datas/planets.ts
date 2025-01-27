@@ -1,7 +1,4 @@
-import { Vector3 } from 'three';
 import { TPlanet } from '../types';
-
-const DEFAULT_ORBITAL_CENTER = new Vector3(0, 0, 0);
 
 export const planets: TPlanet[] = [
   {
