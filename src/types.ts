@@ -25,3 +25,5 @@ export type TOrbit = {
   orbitalCenter: OrbitalCenter;
   orbitalRadius: number;
 };
+
+export type VECTOR_3 = [number, number, number];
