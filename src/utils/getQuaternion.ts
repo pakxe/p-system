@@ -8,7 +8,7 @@ const getQuaternion = (baseDirection: VECTOR_3, targetDirection: VECTOR_3) => {
   const direction = new THREE.Vector3(...targetDirection).normalize();
 
   const quaternion = new THREE.Quaternion();
-  const defaultDirection = new THREE.Vector3(...baseDirection); // 기본 y축
+  const defaultDirection = new THREE.Vector3(...baseDirection);
   quaternion.setFromUnitVectors(defaultDirection, direction);
 
   return quaternion;
