@@ -4,26 +4,39 @@ import Part from './components/Part';
 import { useState } from 'react';
 import desk from '../../datas/desk';
 import { css } from '@emotion/react';
+import PartCamera from './components/PartCamera';
+import PreloadModelsWithProgress from '../../components/PreloadModelsWithProgress';
 
 const AssemblyPage = () => {
   const [triggerMove, setTriggerMove] = useState(false);
   const [curStep, setCurStep] = useState(1);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleMove = () => {
     setTriggerMove((p) => !p);
   };
 
+  const activeSteps = desk.filter((step) => step.id <= curStep);
+
   return (
-    <>
-      <Canvas style={{ height: '100vh', width: '100vw' }}>
+    <div
+      css={css`
+        width: 100vw;
+        height: 100vh;
+      `}>
+      <Canvas>
         <ambientLight intensity={1} />
         <pointLight position={[10, 10, 10]} />
         <directionalLight position={[-10, -10, -5]} intensity={1} />
         <Sky />
 
-        {desk.map(
-          (step) =>
-            step.id <= curStep &&
+        <PreloadModelsWithProgress
+          setter={() => setIsLoaded(true)}
+          names={desk.flatMap((step) => step.requiredParts.map((part) => part.name))}
+        />
+
+        {isLoaded &&
+          activeSteps.map((step) =>
             step.requiredParts.map((part) => (
               <Part
                 key={part.id}
@@ -36,9 +49,10 @@ const AssemblyPage = () => {
                 length={part.length}
               />
             )),
-        )}
+          )}
 
         <OrbitControls />
+        <PartCamera cameraPosition={desk[curStep].cameraInfo.position} />
       </Canvas>
       <div
         css={css`
@@ -75,7 +89,7 @@ const AssemblyPage = () => {
           {}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
