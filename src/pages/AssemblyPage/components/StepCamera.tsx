@@ -13,7 +13,7 @@ const StepCamera = ({ cameraPosition }: Props) => {
 
   const { camera }: { camera: PerspectiveCamera } = useThree();
 
-  const lerpSpeed = 0.04;
+  const lerpSpeed = 0.08;
   const threshold = 0.1;
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const StepCamera = ({ cameraPosition }: Props) => {
   });
 
   // TODO: 시선도 변화시킬거면 target을 ref로 저장하여 수정한다.
-  return <>{!isCameraMoving && <OrbitControls target={new Vector3(0, 0, 0)} />}</>;
+  return <>{!isCameraMoving && <OrbitControls target={new Vector3(0, 0, 0)} maxDistance={60} />}</>;
 };
 
 export default StepCamera;
