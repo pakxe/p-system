@@ -1,0 +1,5 @@
+const MODAL_KEYS = {
+  ASSEMBLY_PART_DETAIL_INFO: 'ASSEMBLY_PART_DETAIL_INFO',
+} as const;
+
+export default MODAL_KEYS;
