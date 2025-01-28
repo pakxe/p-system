@@ -27,8 +27,7 @@ const AssemblyPage = () => {
       `}>
       <Canvas>
         <ambientLight intensity={1} />
-        <pointLight position={[10, 10, 10]} />
-        <directionalLight position={[-10, -10, -5]} intensity={1} />
+        <directionalLight position={[-10, 10, 0]} intensity={2} />
         <Sky />
 
         <PreloadModelsWithProgress
