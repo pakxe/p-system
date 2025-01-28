@@ -37,6 +37,10 @@ const Button = ({ children, isClicked, ...rest }: Props) => {
         &:active {
           transform: scale(0.95);
         }
+
+        &:disabled {
+          background-color: ${theme.colors.floatShallow};
+        }
       `}>
       {children}
     </button>
