@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import getQuaternion from '../utils/getQuaternion';
+import { VECTOR_3 } from '../types';
 
 type ArrowProps = {
   start: THREE.Vector3; // 화살표 시작 위치
-  direction: [number, number, number]; // 방향
+  direction: VECTOR_3; // 방향
   length: number; // 화살표 길이
   color?: string; // 화살표 색상
   coneSize?: number; // 화살표 머리 크기
