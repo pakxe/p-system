@@ -1,15 +1,16 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { PerspectiveCamera, Vector3 } from 'three';
 import { VECTOR_3 } from '../../../types';
+import { OrbitControls } from '@react-three/drei';
 
 type Props = {
   cameraPosition: VECTOR_3;
-  isCameraMoving: boolean;
-  setIsCameraMoving: (value: boolean) => void;
 };
 
-const StepCamera = ({ cameraPosition, setIsCameraMoving, isCameraMoving }: Props) => {
+const StepCamera = ({ cameraPosition }: Props) => {
+  const [isCameraMoving, setIsCameraMoving] = useState(false);
+
   const { camera }: { camera: PerspectiveCamera } = useThree();
   const targetPos = useRef(new Vector3(...cameraPosition));
 
@@ -42,7 +43,8 @@ const StepCamera = ({ cameraPosition, setIsCameraMoving, isCameraMoving }: Props
     }
   });
 
-  return null;
+  // TODO: 시선도 변화시킬거면 target을 ref로 저장하여 수정한다.
+  return <>{!isCameraMoving && <OrbitControls target={new Vector3(0, 0, 0)} />}</>;
 };
 
 export default StepCamera;
