@@ -1,10 +1,10 @@
 import { Canvas } from '@react-three/fiber';
 import useDuplicatedModel from '../../../hooks/useDuplicatedModel';
-import SingleCamera from './SingleCamera';
-import * as THREE from 'three';
+import SpotCamera from './SpotCamera';
 import { css } from '@emotion/react';
-import { OrbitControls } from '@react-three/drei';
 import { ModalProps } from '../../../types/modalType';
+import calcModelSize from '../../../utils/calcModelSize';
+import calcModelCenter from '../../../utils/calcModelCenter';
 
 type Props = ModalProps & {
   name: string;
@@ -13,10 +13,6 @@ type Props = ModalProps & {
 
 const PartDetailModal = ({ isOpen, name, onClose }: Props) => {
   const { Model, originalScene } = useDuplicatedModel(name);
-  const center = new THREE.Box3().setFromObject(originalScene).getCenter(new THREE.Vector3());
-  const boundingBox = new THREE.Box3().setFromObject(originalScene);
-  const size = new THREE.Vector3();
-  boundingBox.getSize(size);
 
   if (!isOpen) {
     return null;
@@ -39,9 +35,9 @@ const PartDetailModal = ({ isOpen, name, onClose }: Props) => {
         <ambientLight intensity={1} />
         <directionalLight position={[10, 20, 10]} intensity={2} />
         <Model />
-        <SingleCamera position={center} size={size.length()} />
-        <OrbitControls />
+        <SpotCamera position={calcModelCenter(originalScene)} size={calcModelSize(originalScene)} canControls />
       </Canvas>
+
       <button
         onClick={onClose}
         css={css`
