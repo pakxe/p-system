@@ -28,7 +28,7 @@ const Star = ({ onClick, name, modelName, axialTilt, rotationSpeed, objectRadius
         }}>
         {modelName ? (
           // <Model name={modelName} />
-          <Model />
+          <Model name='first_planet' />
         ) : (
           <>
             <sphereGeometry args={[objectRadius, 32, 32]} />
