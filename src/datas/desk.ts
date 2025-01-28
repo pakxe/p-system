@@ -1,22 +1,4 @@
-import { VECTOR_3 } from '../types';
-
-type Part = {
-  name: string;
-  id: number;
-  position?: VECTOR_3;
-  targetPosition?: VECTOR_3;
-  direction?: VECTOR_3;
-  length?: number;
-  rotation?: VECTOR_3;
-};
-
-type Step = {
-  title: string;
-  description?: string;
-  caution?: string;
-  id: number;
-  requiredParts: Part[];
-};
+import { Step } from '../types';
 
 const desk: Step[] = [
   {
@@ -27,6 +9,8 @@ const desk: Step[] = [
       {
         name: 'plane',
         id: 1,
+        position: [0, 0, 0],
+        targetPosition: [0, 0, 0],
       },
       {
         name: 'main_frame',
@@ -71,6 +55,9 @@ const desk: Step[] = [
         rotation: [Math.PI, 0, 0],
       },
     ],
+    cameraInfo: {
+      position: [0, 10, 40],
+    },
   },
   {
     title: '책상 오른쪽 다리 조립하기',
@@ -103,6 +90,9 @@ const desk: Step[] = [
         rotation: [0, 0, -Math.PI / 2],
       },
     ],
+    cameraInfo: {
+      position: [37, -21, 44],
+    },
   },
   {
     title: '책상 왼쪽 서랍 조립하기 (1/3)',
@@ -152,6 +142,9 @@ const desk: Step[] = [
         rotation: [Math.PI, 0, 0],
       },
     ],
+    cameraInfo: {
+      position: [-41, -9, 31],
+    },
   },
   {
     title: '책상 왼쪽 서랍 조립하기 (2/3)',
@@ -175,6 +168,10 @@ const desk: Step[] = [
         length: 15,
       },
     ],
+    cameraInfo: {
+      position: [-39, -0, -49],
+      quaternion: [-0, -0, -0],
+    },
   },
   {
     title: '책상 왼쪽 서랍 조립하기 (3/3)',
@@ -253,6 +250,9 @@ const desk: Step[] = [
         rotation: [-Math.PI / 2, 0, 0],
       },
     ],
+    cameraInfo: {
+      position: [-55, 5, -40],
+    },
   },
   {
     title: '책상 본판 흔들림 저감 부품 조립하기(1/2)',
@@ -280,6 +280,9 @@ const desk: Step[] = [
         rotation: [-Math.PI / 2, 0, 0],
       },
     ],
+    cameraInfo: {
+      position: [-9, 10, -50],
+    },
   },
   {
     title: '책상 본판 흔들림 저감 부품 조립하기(2/2)',
@@ -322,6 +325,9 @@ const desk: Step[] = [
         rotation: [-Math.PI / 2, 0, 0],
       },
     ],
+    cameraInfo: {
+      position: [-35, 10, -50],
+    },
   },
   {
     title: '책상 서랍 흔들림 저감 부품 조립하기(1/2)',
@@ -351,6 +357,9 @@ const desk: Step[] = [
         rotation: [0, 0, Math.PI / 2],
       },
     ],
+    cameraInfo: {
+      position: [-60, -8, 23],
+    },
   },
   {
     title: '책상 서랍 흔들림 저감 부품 조립하기(2/2)',
@@ -393,6 +402,17 @@ const desk: Step[] = [
         rotation: [0, 0, Math.PI / 2],
       },
     ],
+    cameraInfo: {
+      position: [-50, -12, 40],
+    },
+  },
+  {
+    title: '책상 조립 완료!',
+    id: 9,
+    requiredParts: [],
+    cameraInfo: {
+      position: [0, 5, 50],
+    },
   },
 ];
 
