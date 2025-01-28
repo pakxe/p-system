@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { PerspectiveCamera, Vector3 } from 'three';
 import { VECTOR_3 } from '../../../types';
@@ -9,24 +9,23 @@ type Props = {
 };
 
 const StepCamera = ({ cameraPosition }: Props) => {
+  console.log('hi');
   const [isCameraMoving, setIsCameraMoving] = useState(false);
 
   const { camera }: { camera: PerspectiveCamera } = useThree();
-  const targetPos = useRef(new Vector3(...cameraPosition));
 
   const lerpSpeed = 0.04;
   const threshold = 0.1;
 
   useEffect(() => {
     setIsCameraMoving(true);
-    targetPos.current.set(...cameraPosition);
   }, [cameraPosition]);
 
   useFrame(() => {
     if (!isCameraMoving) return;
 
     // 카메라 위치 업데이트
-    camera.position.lerp(targetPos.current, lerpSpeed);
+    camera.position.lerp({ x: cameraPosition[0], y: cameraPosition[1], z: cameraPosition[2] }, lerpSpeed);
 
     // 카메라 시선 업데이트
     const target = camera.clone();
@@ -35,8 +34,8 @@ const StepCamera = ({ cameraPosition }: Props) => {
     camera.quaternion.slerp(target.quaternion, 0.9);
 
     // 목표 위치에 근접하면 이동 중단
-    if (camera.position.distanceTo(targetPos.current) < threshold) {
-      camera.position.copy(targetPos.current);
+    if (camera.position.distanceTo({ x: cameraPosition[0], y: cameraPosition[1], z: cameraPosition[2] }) < threshold) {
+      camera.position.copy({ x: cameraPosition[0], y: cameraPosition[1], z: cameraPosition[2] });
       // camera.lookAt(0, 0, 0); // assembly시 덜걱거림 유발
 
       setIsCameraMoving(false);
