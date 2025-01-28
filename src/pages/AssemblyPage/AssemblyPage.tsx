@@ -10,12 +10,12 @@ import Button from '../../components/Button';
 import StepList from './components/StepList';
 
 const AssemblyPage = () => {
-  const [triggerMove, setTriggerMove] = useState(false);
+  const [isAssembled, setIsAssembled] = useState(false);
   const { count: curStep, increase, decrease, update } = useCountInRange({ min: 0, max: desk.length - 1 });
   const [isLoaded, setIsLoaded] = useState(false);
 
   const handleMove = () => {
-    setTriggerMove((p) => !p);
+    setIsAssembled((p) => !p);
   };
 
   const activeSteps = desk.filter((step) => step.id <= curStep);
@@ -43,7 +43,7 @@ const AssemblyPage = () => {
                 name={part.name}
                 position={part.position}
                 targetPosition={part.targetPosition}
-                isMoved={step.id < curStep ? true : triggerMove}
+                isMoved={step.id < curStep ? true : isAssembled}
                 rotation={part.rotation}
                 direction={part.direction}
                 length={part.length}
@@ -53,50 +53,56 @@ const AssemblyPage = () => {
 
         <StepCamera cameraPosition={desk[curStep].cameraInfo.position} />
       </Canvas>
-      <StepList steps={desk} curStep={curStep} handleStep={update} />
-      <div
-        css={css`
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          padding: 10px;
+      {isLoaded && (
+        <>
+          <StepList steps={desk} curStep={curStep} handleStep={update} />
+          <div
+            css={css`
+              position: absolute;
+              bottom: 0;
+              right: 0;
+              padding: 10px;
 
-          display: flex;
-          flex-direction: column;
+              display: flex;
+              flex-direction: column;
 
-          align-items: end;
+              align-items: end;
 
-          gap: 10px;
-        `}>
-        <Button onClick={handleMove}>assembly</Button>
-        <div
-          css={css`
-            display: flex;
-            gap: 16px;
-          `}>
-          <Button
-            onClick={() => {
-              decrease();
-              setTriggerMove(false);
-            }}>
-            prev
-          </Button>
-          <Button
-            onClick={() => {
-              increase();
-              setTriggerMove(false);
-            }}>
-            next
-          </Button>
-        </div>
-        <div
-          css={css`
-            position: absolute;
-            padding: 10px;
-          `}>
-          {}
-        </div>
-      </div>
+              gap: 10px;
+            `}>
+            <Button onClick={handleMove}>{isAssembled ? '해체하기' : '조립하기'}</Button>
+            <div
+              css={css`
+                display: flex;
+                gap: 16px;
+              `}>
+              <Button
+                disabled={curStep === 0}
+                onClick={() => {
+                  decrease();
+                  setIsAssembled(false);
+                }}>
+                이전 스텝으로
+              </Button>
+              <Button
+                disabled={curStep === desk.length - 1}
+                onClick={() => {
+                  increase();
+                  setIsAssembled(false);
+                }}>
+                다음 스텝으로
+              </Button>
+            </div>
+            <div
+              css={css`
+                position: absolute;
+                padding: 10px;
+              `}>
+              {}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
