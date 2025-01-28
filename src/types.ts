@@ -25,3 +25,29 @@ export type TOrbit = {
   orbitalCenter: OrbitalCenter;
   orbitalRadius: number;
 };
+
+export type VECTOR_3 = [number, number, number];
+
+type Part = {
+  name: string;
+  id: number;
+  position: VECTOR_3;
+  targetPosition: VECTOR_3;
+  direction?: VECTOR_3;
+  length?: number;
+  rotation?: VECTOR_3;
+};
+
+export type Step = {
+  title: string;
+  description?: string;
+  caution?: string;
+  id: number;
+  requiredParts: Part[];
+  cameraInfo: CameraInfo;
+};
+
+type CameraInfo = {
+  position: VECTOR_3;
+  quaternion?: VECTOR_3;
+};
