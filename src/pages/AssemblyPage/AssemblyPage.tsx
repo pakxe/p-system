@@ -4,12 +4,12 @@ import Part from './components/Part';
 import { useState } from 'react';
 import desk from '../../datas/desk';
 import { css } from '@emotion/react';
-import PartCamera from './components/PartCamera';
+import StepCamera from './components/StepCamera';
 import PreloadModelsWithProgress from '../../components/PreloadModelsWithProgress';
 
 const AssemblyPage = () => {
   const [triggerMove, setTriggerMove] = useState(false);
-  const [curStep, setCurStep] = useState(1);
+  const [curStep, setCurStep] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const handleMove = () => {
@@ -52,7 +52,7 @@ const AssemblyPage = () => {
           )}
 
         <OrbitControls />
-        <PartCamera cameraPosition={desk[curStep].cameraInfo.position} />
+        <StepCamera cameraPosition={desk[curStep].cameraInfo.position} />
       </Canvas>
       <div
         css={css`
