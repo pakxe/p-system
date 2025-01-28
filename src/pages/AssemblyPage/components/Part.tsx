@@ -34,7 +34,7 @@ function Part({
 
   const { animatedPosition } = useSpring({
     animatedPosition: isMoved ? targetPosition : position,
-    config: { duration: 2000 },
+    config: { duration: 1000 },
   });
 
   if (!clonedScene) return null;
