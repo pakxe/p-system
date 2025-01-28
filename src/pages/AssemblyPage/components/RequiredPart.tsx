@@ -12,7 +12,7 @@ type Props = {
 };
 
 const RequiredPart = ({ name }: Props) => {
-  const { Model, originalScene } = useDuplicatedModel(name);
+  const { Model, originalScene } = useDuplicatedModel(name, 1);
   const center = new THREE.Box3().setFromObject(originalScene).getCenter(new THREE.Vector3());
 
   const [isHovered, setIsHovered] = useState(false);
@@ -34,6 +34,7 @@ const RequiredPart = ({ name }: Props) => {
         <SpotCamera position={center} size={calcModelSize(originalScene)} />
 
         {/* 테두리 */}
+
         {isHovered && (
           <EffectComposer autoClear={false}>
             <Outline selectionLayer={1} visibleEdgeColor={0xffffff} kernelSize={7} />
