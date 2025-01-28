@@ -3,6 +3,7 @@ import { useSpring, animated } from '@react-spring/three';
 import Arrow from '../../../components/Arrow';
 import useDuplicatedModel from '../../../hooks/useDuplicatedModel';
 import { VECTOR_3 } from '../../../types';
+import isAllZero from '../../../utils/isAllZero';
 
 type Props = {
   name: string; // glb 모델 파일명
@@ -25,11 +26,11 @@ function Part({
   direction,
   length,
   position = [0, 0, 0],
-  targetPosition,
+  targetPosition = [0, 0, 0],
   isMoved = false,
   rotation = [0, 0, 0],
 }: Props) {
-  const { clonedScene, Model } = useDuplicatedModel(name);
+  const { clonedScene, Model, originalScene } = useDuplicatedModel(name);
 
   const { animatedPosition } = useSpring({
     animatedPosition: isMoved ? targetPosition : position,
@@ -38,15 +39,22 @@ function Part({
 
   if (!clonedScene) return null;
 
-  // 모델이 0,0,0에 있지 않을 경우 box를 만들고 위치를 모방해내야함.
-  const center = new THREE.Vector3();
-  new THREE.Box3().setFromObject(clonedScene).getCenter(center);
-
   return (
     <animated.group position={animatedPosition} rotation={rotation}>
       <Model />
 
-      {direction && length && !isMoved && <Arrow start={center} direction={direction} length={length} color={'red'} />}
+      {direction && length && !isMoved && (
+        <Arrow
+          start={
+            isAllZero(targetPosition)
+              ? new THREE.Box3().setFromObject(originalScene).getCenter(new THREE.Vector3())
+              : new THREE.Vector3(0, 0, 0)
+          }
+          direction={direction}
+          length={length}
+          color={'red'}
+        />
+      )}
     </animated.group>
   );
 }
