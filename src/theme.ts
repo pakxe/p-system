@@ -34,6 +34,7 @@ const colors = {
   // 반투명한 검정색
   float: 'rgba(0, 0, 0, 0.3)',
   floatHighlight: 'rgba(0, 0, 0, 0.7)',
+  floatShallow: 'rgba(0, 0, 0, 0.1)',
 } as const;
 
 const theme = {
