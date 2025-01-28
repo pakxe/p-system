@@ -1,4 +1,3 @@
-import { OrbitControls, Sky } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import Part from './components/Part';
 import { useState } from 'react';
@@ -7,10 +6,12 @@ import { css } from '@emotion/react';
 import StepCamera from './components/StepCamera';
 import PreloadModelsWithProgress from '../../components/PreloadModelsWithProgress';
 import useCountInRange from '../../hooks/useCountInRange';
+import Button from '../../components/Button';
+import StepList from './components/StepList';
 
 const AssemblyPage = () => {
   const [triggerMove, setTriggerMove] = useState(false);
-  const { count: curStep, increase, decrease } = useCountInRange({ min: 0, max: desk.length - 1 });
+  const { count: curStep, increase, decrease, update } = useCountInRange({ min: 0, max: desk.length - 1 });
   const [isLoaded, setIsLoaded] = useState(false);
 
   const handleMove = () => {
@@ -28,7 +29,6 @@ const AssemblyPage = () => {
       <Canvas>
         <ambientLight intensity={1} />
         <directionalLight position={[-10, 10, 0]} intensity={2} />
-        <Sky />
 
         <PreloadModelsWithProgress
           setter={() => setIsLoaded(true)}
@@ -53,33 +53,42 @@ const AssemblyPage = () => {
 
         <StepCamera cameraPosition={desk[curStep].cameraInfo.position} />
       </Canvas>
+      <StepList steps={desk} curStep={curStep} handleStep={update} />
       <div
         css={css`
           position: absolute;
-          top: 0;
-          left: 0;
+          bottom: 0;
+          right: 0;
           padding: 10px;
 
           display: flex;
           flex-direction: column;
 
+          align-items: end;
+
           gap: 10px;
         `}>
-        <button
-          onClick={() => {
-            decrease();
-            setTriggerMove(false);
-          }}>
-          prev
-        </button>
-        <button
-          onClick={() => {
-            increase();
-            setTriggerMove(false);
-          }}>
-          next
-        </button>
-        <button onClick={handleMove}>assembly</button>
+        <Button onClick={handleMove}>assembly</Button>
+        <div
+          css={css`
+            display: flex;
+            gap: 16px;
+          `}>
+          <Button
+            onClick={() => {
+              decrease();
+              setTriggerMove(false);
+            }}>
+            prev
+          </Button>
+          <Button
+            onClick={() => {
+              increase();
+              setTriggerMove(false);
+            }}>
+            next
+          </Button>
+        </div>
         <div
           css={css`
             position: absolute;
