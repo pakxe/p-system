@@ -1,6 +1,5 @@
 import { useThree } from '@react-three/fiber';
 import { PerspectiveCamera } from 'three';
-import { VECTOR_3 } from '../../../types';
 import * as THREE from 'three';
 
 type Props = {
