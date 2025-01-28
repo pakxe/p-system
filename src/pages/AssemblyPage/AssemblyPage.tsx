@@ -12,6 +12,7 @@ const AssemblyPage = () => {
   const [triggerMove, setTriggerMove] = useState(false);
   const { count: curStep, increase, decrease } = useCountInRange({ min: 0, max: desk.length - 1 });
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isCameraMoving, setIsCameraMoving] = useState(false);
 
   const handleMove = () => {
     setTriggerMove((p) => !p);
@@ -52,8 +53,12 @@ const AssemblyPage = () => {
             )),
           )}
 
-        <OrbitControls />
-        <StepCamera cameraPosition={desk[curStep].cameraInfo.position} />
+        {!isCameraMoving && <OrbitControls />}
+        <StepCamera
+          isCameraMoving={isCameraMoving}
+          setIsCameraMoving={setIsCameraMoving}
+          cameraPosition={desk[curStep].cameraInfo.position}
+        />
       </Canvas>
       <div
         css={css`
