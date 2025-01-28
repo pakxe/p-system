@@ -9,7 +9,6 @@ type Props = {
 };
 
 const StepCamera = ({ cameraPosition }: Props) => {
-  console.log('hi');
   const [isCameraMoving, setIsCameraMoving] = useState(false);
 
   const { camera }: { camera: PerspectiveCamera } = useThree();
