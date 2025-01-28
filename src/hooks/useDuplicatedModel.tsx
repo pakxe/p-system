@@ -6,7 +6,7 @@ import { Object3D } from 'three';
  * 그걸 쉽게 하기 위한 커스텀 훅
  */
 const useDuplicatedModel = (name: string) => {
-  const { scene: originalScene } = useGLTF(`/models/${name}.glb`, true);
+  const { scene: originalScene } = useGLTF(`/models/${name}.glb`);
   const [clonedScene, setClonedScene] = useState<Object3D | null>(null);
 
   useEffect(() => {

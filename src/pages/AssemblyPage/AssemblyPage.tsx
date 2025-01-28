@@ -4,26 +4,39 @@ import Part from './components/Part';
 import { useState } from 'react';
 import desk from '../../datas/desk';
 import { css } from '@emotion/react';
+import StepCamera from './components/StepCamera';
+import PreloadModelsWithProgress from '../../components/PreloadModelsWithProgress';
+import useCountInRange from '../../hooks/useCountInRange';
 
 const AssemblyPage = () => {
   const [triggerMove, setTriggerMove] = useState(false);
-  const [curStep, setCurStep] = useState(1);
+  const { count: curStep, increase, decrease } = useCountInRange({ min: 0, max: desk.length - 1 });
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleMove = () => {
     setTriggerMove((p) => !p);
   };
 
+  const activeSteps = desk.filter((step) => step.id <= curStep);
+
   return (
-    <>
-      <Canvas style={{ height: '100vh', width: '100vw' }}>
+    <div
+      css={css`
+        width: 100vw;
+        height: 100vh;
+      `}>
+      <Canvas>
         <ambientLight intensity={1} />
-        <pointLight position={[10, 10, 10]} />
-        <directionalLight position={[-10, -10, -5]} intensity={1} />
+        <directionalLight position={[-10, 10, 0]} intensity={2} />
         <Sky />
 
-        {desk.map(
-          (step) =>
-            step.id <= curStep &&
+        <PreloadModelsWithProgress
+          setter={() => setIsLoaded(true)}
+          names={desk.flatMap((step) => step.requiredParts.map((part) => part.name))}
+        />
+
+        {isLoaded &&
+          activeSteps.map((step) =>
             step.requiredParts.map((part) => (
               <Part
                 key={part.id}
@@ -36,9 +49,9 @@ const AssemblyPage = () => {
                 length={part.length}
               />
             )),
-        )}
+          )}
 
-        <OrbitControls />
+        <StepCamera cameraPosition={desk[curStep].cameraInfo.position} />
       </Canvas>
       <div
         css={css`
@@ -54,14 +67,14 @@ const AssemblyPage = () => {
         `}>
         <button
           onClick={() => {
-            setCurStep((prev) => prev - 1);
+            decrease();
             setTriggerMove(false);
           }}>
           prev
         </button>
         <button
           onClick={() => {
-            setCurStep((prev) => prev + 1);
+            increase();
             setTriggerMove(false);
           }}>
           next
@@ -75,7 +88,7 @@ const AssemblyPage = () => {
           {}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
