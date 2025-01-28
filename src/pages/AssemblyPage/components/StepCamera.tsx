@@ -37,7 +37,7 @@ const StepCamera = ({ cameraPosition }: Props) => {
     // 목표 위치에 근접하면 이동 중단
     if (camera.position.distanceTo(targetPos.current) < threshold) {
       camera.position.copy(targetPos.current);
-      camera.lookAt(0, 0, 0);
+      // camera.lookAt(0, 0, 0);
 
       setIsCameraMoving(false);
     }
