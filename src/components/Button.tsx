@@ -27,8 +27,15 @@ const Button = ({ children, isClicked, ...rest }: Props) => {
 
         font-size: 1rem;
 
+        transition: background-color 0.3s ease, transform 0.3s ease;
+
         &:hover {
           background-color: ${theme.colors.floatHighlight};
+          transform: scale(1.05);
+        }
+
+        &:active {
+          transform: scale(0.95);
         }
       `}>
       {children}
