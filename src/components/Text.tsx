@@ -1,9 +1,10 @@
-import { css, SerializedStyles } from '@emotion/react';
+import { css, SerializedStyles, useTheme } from '@emotion/react';
 import { ComponentProps } from 'react';
+import theme from '../theme';
 
 type Props = ComponentProps<'p'> & {
   textAlign?: 'left' | 'center' | 'right';
-  color?: string;
+  color?: keyof typeof theme.colors;
   lineLimit?: number;
   cssProp?: SerializedStyles;
   children: React.ReactNode;
@@ -12,13 +13,14 @@ type Props = ComponentProps<'p'> & {
 };
 
 const Text = ({ size, color, textAlign, lineLimit, children, cssProp, weight }: Props) => {
+  const theme = useTheme();
+
   return (
     <p
       css={css`
-        /* ${TYPOGRAPHY[type]} */
         font-size: ${size ?? 16}px;
         font-weight: ${weight ?? 400};
-        color: ${color ?? 'black'};
+        color: ${color ? theme.colors[color] : 'black'};
         text-align: ${textAlign || 'left'};
 
         display: flex;
