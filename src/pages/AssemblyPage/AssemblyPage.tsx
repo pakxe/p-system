@@ -6,10 +6,11 @@ import desk from '../../datas/desk';
 import { css } from '@emotion/react';
 import StepCamera from './components/StepCamera';
 import PreloadModelsWithProgress from '../../components/PreloadModelsWithProgress';
+import useCountInRange from '../../hooks/useCountInRange';
 
 const AssemblyPage = () => {
   const [triggerMove, setTriggerMove] = useState(false);
-  const [curStep, setCurStep] = useState(0);
+  const { count: curStep, increase, decrease } = useCountInRange({ min: 0, max: desk.length - 1 });
   const [isLoaded, setIsLoaded] = useState(false);
 
   const handleMove = () => {
@@ -68,14 +69,14 @@ const AssemblyPage = () => {
         `}>
         <button
           onClick={() => {
-            setCurStep((prev) => prev - 1);
+            decrease();
             setTriggerMove(false);
           }}>
           prev
         </button>
         <button
           onClick={() => {
-            setCurStep((prev) => prev + 1);
+            increase();
             setTriggerMove(false);
           }}>
           next
