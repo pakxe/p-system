@@ -1,10 +1,11 @@
 import { Canvas } from '@react-three/fiber';
 import useDuplicatedModel from '../../../hooks/useDuplicatedModel';
 import * as THREE from 'three';
-import SingleCamera from './SingleCamera';
+import SpotCamera from './SpotCamera';
 import { EffectComposer, Outline } from '@react-three/postprocessing';
 import { useState } from 'react';
 import usePartDetailModal from '../hooks/usePartDetailModal';
+import calcModelSize from '../../../utils/calcModelSize';
 
 type Props = {
   name: string;
@@ -13,9 +14,6 @@ type Props = {
 const RequiredPart = ({ name }: Props) => {
   const { Model, originalScene } = useDuplicatedModel(name);
   const center = new THREE.Box3().setFromObject(originalScene).getCenter(new THREE.Vector3());
-  const boundingBox = new THREE.Box3().setFromObject(originalScene);
-  const size = new THREE.Vector3();
-  boundingBox.getSize(size);
 
   const [isHovered, setIsHovered] = useState(false);
   const { open } = usePartDetailModal(name);
@@ -33,7 +31,7 @@ const RequiredPart = ({ name }: Props) => {
         <ambientLight intensity={1} />
         <directionalLight position={[10, 20, 10]} intensity={2} />
         <Model />
-        <SingleCamera position={center} size={size.length()} />
+        <SpotCamera position={center} size={calcModelSize(originalScene)} />
 
         {/* 테두리 */}
         {isHovered && (
