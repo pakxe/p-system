@@ -9,7 +9,7 @@ type Props = {
   canControls?: boolean;
 };
 
-const SingleCamera = ({ position, size, canControls }: Props) => {
+const SpotCamera = ({ position, size, canControls }: Props) => {
   const { camera }: { camera: PerspectiveCamera } = useThree();
 
   const distance = size / 2;
@@ -21,4 +21,4 @@ const SingleCamera = ({ position, size, canControls }: Props) => {
   return canControls ? <OrbitControls target={position} /> : null;
 };
 
-export default SingleCamera;
+export default SpotCamera;
