@@ -22,10 +22,17 @@ const StepCamera = ({ cameraPosition }: Props) => {
 
   useFrame(() => {
     if (!isCameraMoving) return;
+    const width = window.innerWidth;
+    const distanceMultiplier = width > 1200 ? 1 : width > 800 ? 1.5 : 2; // 화면 크기에 따라 멀리 밀기
+
+    const adjustedPosition = {
+      x: cameraPosition[0] * distanceMultiplier,
+      y: cameraPosition[1] * distanceMultiplier,
+      z: cameraPosition[2] * distanceMultiplier,
+    };
 
     // 카메라 위치 업데이트
-    camera.position.lerp({ x: cameraPosition[0], y: cameraPosition[1], z: cameraPosition[2] }, lerpSpeed);
-
+    camera.position.lerp(adjustedPosition, lerpSpeed);
     // 카메라 시선 업데이트
     const target = camera.clone();
     target.lookAt(0, 0, 0);
