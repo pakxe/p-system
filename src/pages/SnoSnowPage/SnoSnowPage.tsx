@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { PCFSoftShadowMap } from 'three';
-import CameraRig from '../components/CameraRig';
-import Button from '../components/Button';
+import CameraRig from '../../components/CameraRig';
+import Button from '../../components/Button';
 import { css } from '@emotion/react';
-import Snowfall from '../components/Snowfall';
+import Snowfall from '../../components/Snowfall';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
-import Snowball from './SnoSnowPage/components/Snowball';
-import SnowPlane from './SnoSnowPage/components/SnowPlane';
+import Snowball from './components/Snowball';
+import SnowPlane from './components/SnowPlane';
 
-const SnowBallPage = () => {
+const SnoSnowPage = () => {
   const [triggerReset, setTriggerReset] = useState(false); // 값을 바꿀 때마다 초기화한다
 
   return (
@@ -54,4 +54,4 @@ const SnowBallPage = () => {
   );
 };
 
-export default SnowBallPage;
+export default SnoSnowPage;
