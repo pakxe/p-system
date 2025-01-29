@@ -1,8 +1,8 @@
-import { css } from '@emotion/react';
-
 import { Mesh } from 'three';
 
 import { SystemObjectInfoModalStyle as style } from './SystemObjectInfoModal.style';
+import Button from '../Button';
+import Text from '../Text';
 
 type Props = {
   name: string;
@@ -27,41 +27,15 @@ const SystemObjectInfoModal = ({ path, name, onExplore, description }: Props) =>
   return (
     <div css={style.modalContainerStyle}>
       <div>
-        <h2
-          css={css`
-            font-weight: 700;
-            color: #333;
-          `}>
+        <Text weight={600} size={20}>
           {name}
-        </h2>
-        <p
-          css={css`
-            color: #666;
-          `}>
-          {description}
-        </p>
+        </Text>
+        <Text>{description}</Text>
       </div>
 
-      <button
-        css={css`
-          padding: 10px 20px;
-          background-color: #f17086;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          font-size: 14px;
-          cursor: pointer;
-          box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-          &:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
-          }
-        `}
-        onClick={clickHandler}>
-        탐험하기
-      </button>
+      <Button onClick={clickHandler} disabled={!path}>
+        {path ? '탐험하기' : '아직 원시 행성이라 탐험할 수 없어요.'}
+      </Button>
     </div>
   );
 };
