@@ -10,7 +10,7 @@ const Progress = ({ setter }: { setter: () => void }) => {
     }
   }, [progress, setter]);
 
-  return <Html center>{Math.round(progress)}% loaded</Html>;
+  return <Html zIndexRange={[1, 0]}>{Math.round(progress)}% loaded</Html>;
 };
 
 export default Progress;
