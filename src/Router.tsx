@@ -3,6 +3,7 @@ import App from './App';
 import AssemblyPage from './pages/AssemblyPage/AssemblyPage';
 import { ModalProvider } from './hooks/useModal';
 import AssemblyDeskPage from './pages/AssemblyPage/AssemblyDeskPage';
+import SnowBallPage from './pages/SnowBallPage';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: '/assembly/desk',
         element: <AssemblyDeskPage />,
+      },
+      {
+        path: '/snosnow',
+        element: <SnowBallPage />,
       },
     ],
   },
