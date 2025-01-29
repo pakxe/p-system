@@ -78,7 +78,7 @@ function CameraMover({ selectedSystemObjectRef, isExplore }: Props) {
     // 정확히 타겟 중심을 바라보도록 수정
     currentLookAt.current.lerp(targetPosition, lerpSpeed);
     camera.lookAt(
-      currentLookAt.current.x + 4,
+      currentLookAt.current.x + 3,
       currentLookAt.current.y,
       currentLookAt.current.z, // 정확한 중심 좌표 사용
     );
