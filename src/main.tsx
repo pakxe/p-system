@@ -1,27 +1,18 @@
 import { StrictMode } from 'react';
 
 import { createRoot } from 'react-dom/client';
-import App from './App';
 import { GlobalStyle } from './GlobalStyle';
-import { Global } from '@emotion/react';
+import { Global, ThemeProvider } from '@emotion/react';
 import './index.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import SnowBallPAge from './pages/SnowBallPage';
-
-const Router = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<App />} />
-        <Route path='/snow-ball' element={<SnowBallPAge />} />
-      </Routes>
-    </BrowserRouter>
-  );
-};
+import { RouterProvider } from 'react-router-dom';
+import router from './Router';
+import theme from './theme';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Global styles={GlobalStyle} />
-    <Router />
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} />
+      <Global styles={GlobalStyle} />
+    </ThemeProvider>
   </StrictMode>,
 );

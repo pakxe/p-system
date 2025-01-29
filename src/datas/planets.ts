@@ -67,3 +67,4 @@ export const planets: TPlanet[] = [
     axialTilt: 3.13,
   },
 ];
+

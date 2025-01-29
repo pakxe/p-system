@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import Planet from './components/Planet';
 import CameraMover from './components/CameraMover';
-import { planets } from './datas/planets';
+import { system } from './datas/system';
 import Lights from './components/Lights';
 import SpaceBackground from './components/SpaceBackground';
 import Star from './components/Star';
@@ -41,8 +41,7 @@ function App() {
       `}
       onWheel={clearSelectedState}>
       {/* 탐험 시작하면 페이지 전환 효과 */}
-      {/* {isExplore && <ExpandingCircle color={system.planets.find((planet) => planet.name === targetName)?.mainColor} />} */}
-      {isExplore && <ExpandingCircle color={planets.find((planet) => planet.name === targetName)?.mainColor} />}
+      {isExplore && <ExpandingCircle color={system.planets.find((planet) => planet.name === targetName)?.mainColor} />}
 
       <Canvas
         camera={{
@@ -52,8 +51,8 @@ function App() {
         <SpaceBackground />
         <Lights />
         {/* 행성 렌더링 */}
-        <Star {...planets[0]} axialTilt={20} modelName='s' onClick={onSelect} onExplore={onExplore} />
-        {planets.map((planet, index) => (
+        <Star {...system.star} axialTilt={20} modelName='s' onClick={onSelect} onExplore={onExplore} />
+        {system.planets.map((planet, index) => (
           <group key={index}>
             <Planet
               {...planet}
@@ -88,7 +87,7 @@ function App() {
             kernelSize={4}
           /> */}
         </EffectComposer>
-        <axesHelper />
+        <axesHelper args={[5]} />
       </Canvas>
       <button
         css={css`
