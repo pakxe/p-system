@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import { Canvas, useLoader } from '@react-three/fiber';
-import { PCFSoftShadowMap, TextureLoader } from 'three';
-import snowSurface from '../assets/snow-surface.jpg';
+import { Canvas } from '@react-three/fiber';
+import { PCFSoftShadowMap } from 'three';
 import CameraRig from '../components/CameraRig';
 import Button from '../components/Button';
 import { css } from '@emotion/react';
 import Snowfall from '../components/Snowfall';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import Snowball from './SnoSnowPage/components/Snowball';
+import SnowPlane from './SnoSnowPage/components/SnowPlane';
 
 const SnowBallPage = () => {
-  const texture = useLoader(TextureLoader, snowSurface);
   const [triggerReset, setTriggerReset] = useState(false); // 값을 바꿀 때마다 초기화한다
 
   return (
@@ -27,18 +26,15 @@ const SnowBallPage = () => {
           shadow-camera-right={25}
           shadow-mapSize={2048}
           castShadow
-          position={[-1, 50, 20]} // 하늘에서 비추는 느낌
-          intensity={1.2} // 기본 조명보다 약간 어둡게
-          color={'#84a4e5'} // 파란빛 (밤하늘 느낌)
+          position={[-1, 50, 20]}
+          intensity={1.2}
+          color={'#84a4e5'}
         />
         {/* 주변을 은은하게 비추는 조명 */}
         <pointLight position={[0, 30, 0]} intensity={10} color={'#f88a72'} distance={100} decay={0.8} />
         <fog attach='fog' args={['#0a0a1a', 10, 80]} />
         <Snowball triggerReset={triggerReset} />
-        <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
-          <planeGeometry args={[100, 100]} />
-          <meshStandardMaterial map={texture} />
-        </mesh>
+        <SnowPlane />
         <Snowfall />
         <CameraRig />
         {/*   <EffectComposer selectionLayer={1} >
