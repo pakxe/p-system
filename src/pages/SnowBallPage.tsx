@@ -1,31 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
-import { Canvas, ThreeEvent, useFrame, useLoader, useThree } from '@react-three/fiber';
-import { OrbitControls, useGLTF } from '@react-three/drei';
-import NightSky from '../components/NightSky';
-import {
-  BufferGeometry,
-  Camera,
-  DirectionalLightHelper,
-  Mesh,
-  NormalBufferAttributes,
-  PCFSoftShadowMap,
-  Quaternion,
-  TextureLoader,
-  Vector3,
-} from 'three';
+import { Canvas, ThreeEvent, useFrame, useLoader } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
+import { Mesh, PCFSoftShadowMap, TextureLoader } from 'three';
 import snowSound from '../assets/snow.mp3';
 import snowSurface from '../assets/snow-surface.jpg';
-import CameraMoveLittle from '../components/CameraRig';
 import CameraRig from '../components/CameraRig';
-import { Bloom, EffectComposer } from '@react-three/postprocessing';
-import snowball from '../../public/modals/snowball.glb';
-import lb from '../../public/modals/loot_box.glb';
+import snowball from '../../public/models/snowball.glb';
+import setQuaternion from '../utils/setQuaternion';
+// import { Bloom, EffectComposer } from '@react-three/postprocessing';
 
 const MIN_VELOCITY = 0.0001;
 const DEFAULT_X_Z = [0, 0];
 
 const Snowball = () => {
-  const snowballRef = useRef();
+  const snowballRef = useRef<Mesh>();
 
   const [isDragging, setIsDragging] = useState(false); // 드래그 상태
   const lastPointerPos = useRef(DEFAULT_X_Z);
@@ -47,28 +35,23 @@ const Snowball = () => {
     if (isDragging && snowballRef.current) {
       const [lastX, lastY] = lastPointerPos.current;
       const deltaX = event.clientX - lastX;
-      const deltaY = event.clientY - lastY;
+      const deltaZ = event.clientY - lastY;
 
-      if (deltaX === 0 && deltaY === 0) return; // 이유는 모르겠으나 0,0이 교차로 찍혀 움직여지지 않을 때가 있음. 그걸 피하기 위함
-
-      setVelocity([deltaX * 0.02, deltaY * 0.02]);
-      setPosition((prev) => [prev[0] + deltaX * 0.01, prev[1], prev[2] + deltaY * 0.01]);
-
+      if (deltaX === 0 && deltaZ === 0) return; // 0,0이 교차로 찍혀 움직여지지 않을 때가 있음. 그걸 피하기 위함
       lastPointerPos.current = [event.clientX, event.clientY];
-      const moveAmount = Math.abs(deltaX) + Math.abs(deltaY);
-      // setScale((prev) => prev + moveAmount * 0.0002);
 
-      const axis = new Vector3(deltaY, 0, -deltaX).normalize();
-      const angle = (moveAmount / scale) * 0.005;
+      setPosition((prev) => [prev[0] + deltaX * 0.01, prev[1], prev[2] + deltaZ * 0.01]);
+      setVelocity([deltaX * 0.02, deltaZ * 0.02]);
 
-      const quaternion = new Quaternion();
-      quaternion.setFromAxisAngle(axis, angle);
-      snowballRef.current.quaternion.multiplyQuaternions(quaternion, snowballRef.current.quaternion);
+      const moveAmount = Math.abs(deltaX) + Math.abs(deltaZ);
+      setScale((prev) => prev + moveAmount * 0.0002);
+
+      setQuaternion([deltaZ, 0, -deltaX], moveAmount * 0.005, snowballRef.current);
     }
   };
 
   // 드래그 끝 - 드래깅 상태 false로
-  const handleDragEnd = (event: ThreeEvent<PointerEvent>) => {
+  const handleDragEnd = () => {
     setIsDragging(false);
   };
 
@@ -78,24 +61,20 @@ const Snowball = () => {
       const deltaX = velocity[0];
       const deltaZ = velocity[1];
       const moveAmount = Math.abs(deltaX) + Math.abs(deltaZ);
+      setScale((prev) => prev + moveAmount * 0.0002);
 
       setPosition((prev) => [prev[0] + velocity[0], prev[1], prev[2] + velocity[1]]);
-
       setVelocity((prev) => [prev[0] * 0.6, prev[1] * 0.6]);
 
       if (Math.abs(velocity[0]) < MIN_VELOCITY && Math.abs(velocity[1]) < MIN_VELOCITY) {
-        setVelocity([0, 0]);
+        setVelocity(DEFAULT_X_Z);
       }
-      const axis = new Vector3(deltaZ, 0, -deltaX).normalize();
-      const angle = moveAmount;
 
-      const quaternion = new Quaternion();
-      quaternion.setFromAxisAngle(axis, angle);
-      snowballRef.current.quaternion.multiplyQuaternions(quaternion, snowballRef.current.quaternion);
+      setQuaternion([deltaZ, 0, -deltaX], moveAmount, snowballRef.current);
     }
   });
 
-  const audioRef = useRef(null);
+  // const audioRef = useRef(null);
 
   // const fadeOutAudio = (audio) => {
   //   const fadeInterval = 100; // 볼륨을 줄일 간격(ms)
