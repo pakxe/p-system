@@ -29,7 +29,7 @@ const Star = ({ onClick, name, modelName, axialTilt, rotationSpeed, objectRadius
         <sphereGeometry args={[objectRadius, 32, 32]} />
         <meshStandardMaterial
           emissive='#f56a00' // 발광 색상
-          emissiveIntensity={0.2} // 발광 강도
+          emissiveIntensity={3} // 발광 강도
         />
       </mesh>
     </group>
