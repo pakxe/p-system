@@ -30,7 +30,7 @@ export type TOrbit = {
 
 export type VECTOR_3 = [number, number, number];
 
-type Part = {
+export type Part = {
   name: string;
   id: number;
   position: VECTOR_3;

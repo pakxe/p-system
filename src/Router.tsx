@@ -1,14 +1,16 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import App from './App';
 import AssemblyPage from './pages/AssemblyPage/AssemblyPage';
+import { ModalProvider } from './hooks/useModal';
+import AssemblyDeskPage from './pages/AssemblyPage/AssemblyDeskPage';
 
 const router = createBrowserRouter([
   {
     path: '',
     element: (
-      <div>
+      <ModalProvider>
         <Outlet />
-      </div>
+      </ModalProvider>
     ),
     children: [
       {
@@ -18,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: '/assembly',
         element: <AssemblyPage />,
+      },
+      {
+        path: '/assembly/desk',
+        element: <AssemblyDeskPage />,
       },
     ],
   },
