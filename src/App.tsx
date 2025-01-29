@@ -87,7 +87,6 @@ function App() {
             kernelSize={4}
           /> */}
         </EffectComposer>
-        <axesHelper args={[5]} />
       </Canvas>
       <button
         css={css`

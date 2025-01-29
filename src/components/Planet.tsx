@@ -8,7 +8,8 @@ import { useFrame } from '@react-three/fiber';
 import useRotation from '../hooks/useRotation';
 import useOrbit from '../hooks/useOrbit';
 import Satellite from './Satellite';
-import { EffectComposer, Outline } from '@react-three/postprocessing';
+import Model from './Model';
+import { useNavigate } from 'react-router-dom';
 
 type Props = TPlanet & {
   targetName?: string | null;
@@ -33,6 +34,9 @@ function Planet({
   centerRef,
   mainColor,
   objectRadius,
+  fileName,
+  description,
+  path,
 }: Props) {
   const [hovered, setHover] = useState(false);
 
@@ -67,9 +71,8 @@ function Planet({
           setHover(false);
           if (onHover) onHover(null);
         }}>
-        {name === 'Earth' ? (
-          // <Model />
-          <></>
+        {fileName ? (
+          <Model name={fileName} />
         ) : (
           <>
             <sphereGeometry args={[objectRadius, 32, 32]} />
@@ -92,17 +95,21 @@ function Planet({
           <mesh ref={modalRef} rotation={[0.25, -Math.PI / 4, 0]}>
             <Html>
               <SystemObjectInfoModal
+                description={description}
+                path={path}
                 name={name}
                 planetMeshRef={planetRef}
                 onExplore={() => {
-                  if (onExplore) onExplore();
+                  if (onExplore) {
+                    onExplore();
+                  }
                 }}
               />
             </Html>
           </mesh>
         </group>
       )}
-  </group>
+    </group>
   );
 }
 

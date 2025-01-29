@@ -6,12 +6,24 @@ import { SystemObjectInfoModalStyle as style } from './SystemObjectInfoModal.sty
 
 type Props = {
   name: string;
+  path?: string;
+  description?: string;
 
   planetMeshRef: React.RefObject<Mesh>;
   onExplore: () => void;
 };
 
-const SystemObjectInfoModal = ({ name, onExplore }: Props) => {
+const SystemObjectInfoModal = ({ path, name, onExplore, description }: Props) => {
+  const clickHandler = async () => {
+    onExplore();
+
+    if (!path) return;
+
+    await new Promise((res) => setTimeout(() => res(null), 3000));
+
+    location.href = path;
+  };
+
   return (
     <div css={style.modalContainerStyle}>
       <div>
@@ -26,7 +38,7 @@ const SystemObjectInfoModal = ({ name, onExplore }: Props) => {
           css={css`
             color: #666;
           `}>
-          플래닛의 설명을 적어주세요!
+          {description}
         </p>
       </div>
 
@@ -47,7 +59,7 @@ const SystemObjectInfoModal = ({ name, onExplore }: Props) => {
             box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
           }
         `}
-        onClick={onExplore}>
+        onClick={clickHandler}>
         탐험하기
       </button>
     </div>
