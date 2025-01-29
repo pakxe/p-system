@@ -11,6 +11,8 @@ export type TSystemObject = {
   orbitalSpeed: number; // radian per frame
   rotationSpeed: number;
   axialTilt: number; // 각도. 라디안 아님
+  path?: string;
+  fileName?: string;
 };
 
 export type TStar = Omit<TSystemObject, 'orbitalRadius' | 'satellites' | 'orbitalSpeed'>;
