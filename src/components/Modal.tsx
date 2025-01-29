@@ -2,6 +2,7 @@ import { css, useTheme } from '@emotion/react';
 import { ModalProps } from '../types/modalType';
 import { WithChildren } from '../types/with';
 import CloseButton from './CloseButton';
+import Z_INDEX from '../constants/zIndex';
 
 const Modal = ({ onClose, isOpened, children }: WithChildren & ModalProps) => {
   if (!isOpened) return null;
@@ -20,7 +21,7 @@ const Modal = ({ onClose, isOpened, children }: WithChildren & ModalProps) => {
         justify-content: center;
         align-items: center;
 
-        z-index: 100;
+        z-index: ${Z_INDEX.MODAL};
       `}>
       <Dimmer onClose={onClose} />
       <Content onClose={onClose}>{children}</Content>
@@ -63,8 +64,6 @@ const Content = ({ children, onClose }: WithChildren & Pick<ModalProps, 'onClose
         padding: 32px;
 
         background-color: ${theme.colors.black};
-
-        z-index: 101;
 
         position: relative;
       `}>

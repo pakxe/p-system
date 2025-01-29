@@ -1,5 +1,6 @@
 import { Html, useProgress } from '@react-three/drei';
 import { useEffect } from 'react';
+import Z_INDEX from '../constants/zIndex';
 
 const Progress = ({ setter }: { setter: () => void }) => {
   const { progress } = useProgress();
@@ -10,7 +11,7 @@ const Progress = ({ setter }: { setter: () => void }) => {
     }
   }, [progress, setter]);
 
-  return <Html zIndexRange={[1, 0]}>{Math.round(progress)}% loaded</Html>;
+  return <Html zIndexRange={[Z_INDEX.FLOATING_ON_CANVAS, 0]}>{Math.round(progress)}% loaded</Html>;
 };
 
 export default Progress;

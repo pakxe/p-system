@@ -12,6 +12,7 @@ import Star from '../components/Star';
 import CameraMover from '../components/CameraMover';
 import Button from '../components/Button';
 import Text from '../components/Text';
+import Z_INDEX from '../constants/zIndex';
 
 function SystemPage() {
   const [selectedSystemObjectRef, setSelectedSystemObjectRef] = useState<React.RefObject<THREE.Mesh> | null>(null);
@@ -81,7 +82,7 @@ function SystemPage() {
           top: 20px;
           right: 20px;
 
-          z-index: 100;
+          z-index: ${Z_INDEX.FLOATING_ON_CANVAS};
 
           display: flex;
           gap: 16px;
