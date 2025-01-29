@@ -6,6 +6,8 @@ import { EffectComposer, Outline } from '@react-three/postprocessing';
 import { useState } from 'react';
 import usePartDetailModal from '../hooks/usePartDetailModal';
 import calcModelSize from '../../../utils/calcModelSize';
+import { css, useTheme } from '@emotion/react';
+import Text from '../../../components/Text';
 
 type Props = {
   name: string;
@@ -18,8 +20,10 @@ const RequiredPart = ({ name }: Props) => {
   const [isHovered, setIsHovered] = useState(false);
   const { open } = usePartDetailModal(name);
 
+  const theme = useTheme();
+
   return (
-    <>
+    <div>
       <Canvas
         style={{
           width: '100px',
@@ -34,14 +38,28 @@ const RequiredPart = ({ name }: Props) => {
         <SpotCamera position={center} size={calcModelSize(originalScene)} />
 
         {/* 테두리 */}
-
         {isHovered && (
           <EffectComposer autoClear={false}>
             <Outline selectionLayer={1} visibleEdgeColor={0xffffff} kernelSize={7} />
           </EffectComposer>
         )}
       </Canvas>
-    </>
+      {isHovered && (
+        <Text
+          cssProp={css`
+            position: absolute;
+
+            background-color: ${theme.colors.float};
+
+            padding: 8px;
+            border-radius: 8px;
+
+            z-index: 10;
+          `}>
+          {name}
+        </Text>
+      )}
+    </div>
   );
 };
 
