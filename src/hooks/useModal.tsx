@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 import MODAL_KEYS from '../constants/modalKeys';
+import { ModalProps } from '../types/modalType';
 
 const ModalContext = createContext<ReturnType<typeof useModal> | null>(null);
 
@@ -7,14 +8,13 @@ type ModalKey = (typeof MODAL_KEYS)[keyof typeof MODAL_KEYS];
 type Modal = {
   id: ModalKey;
   isOpen: boolean;
-  cb: (isOpen: boolean, onClose: () => void) => React.JSX.Element;
+  cb: ({ isOpened, onClose }: ModalProps) => React.JSX.Element;
 };
 
 const useModal = () => {
   const [modals, setModals] = useState<Map<ModalKey, Modal>>(new Map());
 
-  const open = (key: ModalKey, cb: (isOpen: boolean, onClose: () => void) => React.JSX.Element) => {
-    console.log('h');
+  const open = (key: ModalKey, cb: ({ isOpened, onClose }: ModalProps) => React.JSX.Element) => {
     setModals((prev) => {
       const newModals = new Map(prev);
       newModals.set(key, { id: key, isOpen: true, cb });
@@ -30,7 +30,7 @@ const useModal = () => {
       const modal = newModals.get(key);
       if (modal) {
         modal.isOpen = false;
-        modal.cb(modal.isOpen, () => close(key));
+        // modal.cb({ isOpened: modal.isOpen, onClose: () => close(key) });
       }
       return newModals;
     });
@@ -58,7 +58,9 @@ const ModalProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <ModalContext.Provider value={{ ...values }}>
-      {Array.from(values.modals).map(([key, value]) => value.isOpen && value.cb(value.isOpen, () => values.close(key)))}
+      {Array.from(values.modals).map(
+        ([key, value]) => value.isOpen && value.cb({ isOpened: value.isOpen, onClose: () => values.close(key) }),
+      )}
       {children}
     </ModalContext.Provider>
   );
