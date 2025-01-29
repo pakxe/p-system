@@ -28,9 +28,10 @@ const PRIMITIVE_COLORS = {
 const colors = {
   primary: PRIMITIVE_COLORS.orange[500],
 
-  black: PRIMITIVE_COLORS.gray[800],
+  black: PRIMITIVE_COLORS.gray[900],
   white: PRIMITIVE_COLORS.gray[50],
 
+  caution: PRIMITIVE_COLORS.orange[800],
   // 반투명한 검정색
   float: 'rgba(0, 0, 0, 0.3)',
   floatHighlight: 'rgba(0, 0, 0, 0.7)',
