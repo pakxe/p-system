@@ -4,9 +4,10 @@ import { ComponentProps } from 'react';
 type Props = ComponentProps<'button'> & {
   children: React.ReactNode;
   isClicked?: boolean;
+  fullWidth?: boolean;
 };
 
-const Button = ({ children, isClicked, ...rest }: Props) => {
+const Button = ({ children, isClicked, fullWidth, ...rest }: Props) => {
   const theme = useTheme();
 
   return (
@@ -15,6 +16,7 @@ const Button = ({ children, isClicked, ...rest }: Props) => {
       css={css`
         min-width: 42px;
         height: 42px;
+        width: ${fullWidth ? '100%' : 'auto'};
 
         background-color: ${isClicked ? theme.colors.floatHighlight : theme.colors.float};
         color: ${theme.colors.white};
