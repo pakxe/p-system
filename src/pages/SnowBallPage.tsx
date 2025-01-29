@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Canvas, ThreeEvent, useFrame, useLoader } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import { Mesh, PCFSoftShadowMap, TextureLoader } from 'three';
@@ -31,7 +31,7 @@ const Snowball = ({ triggerReset }: Props) => {
 
   const [velocity, setVelocity] = useState(DEFAULT_X_Z); // 드래그 속도 (x, z)
   const [position, setPosition] = useState<VECTOR_3>([0, 0.8, 0]); // 눈덩이 위치
-  const { scene } = useGLTF(snowball);
+  const { scene, material } = useGLTF(snowball);
 
   const resetSnowball = () => {
     lastPointerPos.current = DEFAULT_X_Z;
@@ -39,6 +39,8 @@ const Snowball = ({ triggerReset }: Props) => {
     setPosition(DEFAULT_POSITION);
     setScale(DEFAULT_SCALE);
   };
+
+  useLayoutEffect(() => scene.traverse((o) => o.isMesh && (o.castShadow = o.receiveShadow = true)), []);
 
   useEffect(() => resetSnowball, [triggerReset]);
   const handleDragStart = (event: ThreeEvent<PointerEvent>) => {
@@ -136,8 +138,7 @@ const Snowball = ({ triggerReset }: Props) => {
       onPointerDown={handleDragStart}
       onPointerMove={handleDragging}
       onPointerUp={handleDragEnd}>
-      <primitive object={scene} scale={[scale, scale, scale]} />
-      <sphereGeometry args={[scale + 0.2, 32, 32]} />
+      <primitive castShadow object={scene} scale={[scale, scale, scale]} />
     </mesh>
   );
 };
@@ -174,6 +175,9 @@ const SnowBallPage = () => {
         </mesh>
         <Snowfall />
         <CameraRig />
+        {/*   <EffectComposer selectionLayer={1} >
+          <Bloom selectionLayer={1}  kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.1} intensity={0.8} />
+        </EffectComposer> */}
       </Canvas>
       <div
         css={css`
