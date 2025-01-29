@@ -36,6 +36,7 @@ const colors = {
   float: 'rgba(0, 0, 0, 0.3)',
   floatHighlight: 'rgba(0, 0, 0, 0.7)',
   floatShallow: 'rgba(0, 0, 0, 0.1)',
+  floatWhite: 'rgba(255, 255, 255, 0.6)',
 } as const;
 
 const theme = {
