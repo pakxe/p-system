@@ -73,7 +73,6 @@ function App() {
           <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.6} />
           <Bloom kernelSize={4} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
         </EffectComposer>
-        <axesHelper args={[5]} />
       </Canvas>
       <button
         css={css`
