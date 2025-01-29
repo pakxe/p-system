@@ -11,6 +11,7 @@ import Planet from '../components/Planet';
 import Star from '../components/Star';
 import CameraMover from '../components/CameraMover';
 import Button from '../components/Button';
+import Text from '../components/Text';
 
 function SystemPage() {
   const [selectedSystemObjectRef, setSelectedSystemObjectRef] = useState<React.RefObject<THREE.Mesh> | null>(null);
@@ -52,7 +53,7 @@ function SystemPage() {
         <SpaceBackground />
         <Lights />
         {/* 행성 렌더링 */}
-        <Star {...system.star} axialTilt={20} modelName='s' onClick={onSelect} onExplore={onExplore} />
+        <Star {...system.star} axialTilt={20} modelName='s' onClick={onSelect} />
         {system.planets.map((planet, index) => (
           <group key={index}>
             <Planet
@@ -74,17 +75,23 @@ function SystemPage() {
           <Bloom kernelSize={4} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.2} />
         </EffectComposer>
       </Canvas>
-      <Button
+      <div
         css={css`
           position: absolute;
           top: 20px;
           right: 20px;
 
           z-index: 100;
-        `}
-        onClick={clearSelectedState}>
-        system으로 돌아가기
-      </Button>
+
+          display: flex;
+          gap: 16px;
+          align-items: center;
+        `}>
+        <Text color='white' weight={600} size={20}>
+          공전하는 행성들을 클릭해 탐험해보세요! 💫
+        </Text>
+        <Button onClick={clearSelectedState}>위에서 바라보기</Button>
+      </div>
     </div>
   );
 }
