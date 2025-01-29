@@ -6,17 +6,18 @@ import { ModalProps } from '../../../types/modalType';
 import calcModelSize from '../../../utils/calcModelSize';
 import calcModelCenter from '../../../utils/calcModelCenter';
 import Text from '../../../components/Text';
+import CloseButton from '../../../components/CloseButton';
 
 type Props = ModalProps & {
   name: string;
   onClose: () => void;
 };
 
-const PartDetailModal = ({ isOpen, name, onClose }: Props) => {
+const PartDetailModal = ({ isOpened, name, onClose }: Props) => {
   const { Model, originalScene } = useDuplicatedModel(name);
   const theme = useTheme();
 
-  if (!isOpen) {
+  if (!isOpened) {
     return null;
   }
 
@@ -55,21 +56,7 @@ const PartDetailModal = ({ isOpen, name, onClose }: Props) => {
         <SpotCamera position={calcModelCenter(originalScene)} size={calcModelSize(originalScene)} canControls />
       </Canvas>
 
-      <button
-        onClick={onClose}
-        css={css`
-          position: absolute;
-          top: 10px;
-          right: 10px;
-
-          background-color: white;
-          border: none;
-          border-radius: 5px;
-          padding: 5px;
-          cursor: pointer;
-        `}>
-        닫기
-      </button>
+      <CloseButton onClose={onClose} />
     </div>
   );
 };
