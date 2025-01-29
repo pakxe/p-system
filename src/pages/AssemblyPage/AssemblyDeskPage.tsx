@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import Part from './components/Part';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import desk from '../../datas/desk';
 import { css, keyframes } from '@emotion/react';
 import StepCamera from './components/StepCamera';
@@ -8,6 +8,7 @@ import PreloadModelsWithProgress from '../../components/PreloadModelsWithProgres
 import useCountInRange from '../../hooks/useCountInRange';
 import Button from '../../components/Button';
 import StepList from './components/StepList';
+import useConfirmRequiredPartsModal from './hooks/useConfirmRequiredPartsModal';
 
 const animation = keyframes`
 	0% {
@@ -25,12 +26,19 @@ const AssemblyDeskPage = () => {
   const [isAssembled, setIsAssembled] = useState(false);
   const { count: curStep, increase, decrease, update } = useCountInRange({ min: 0, max: desk.length - 1 });
   const [isLoaded, setIsLoaded] = useState(false);
+  const { open } = useConfirmRequiredPartsModal();
 
   const handleMove = () => {
     setIsAssembled((p) => !p);
   };
 
   const activeSteps = desk.filter((step) => step.id <= curStep);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    open();
+  }, [isLoaded]);
 
   return (
     <div
