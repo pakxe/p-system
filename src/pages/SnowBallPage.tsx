@@ -7,23 +7,39 @@ import snowSurface from '../assets/snow-surface.jpg';
 import CameraRig from '../components/CameraRig';
 import snowball from '../../public/models/snowball.glb';
 import setQuaternion from '../utils/setQuaternion';
+import Button from '../components/Button';
+import { css } from '@emotion/react';
+import { VECTOR_3 } from '../types';
 // import { Bloom, EffectComposer } from '@react-three/postprocessing';
 
 const MIN_VELOCITY = 0.0001;
 const DEFAULT_X_Z = [0, 0];
+const DEFAULT_POSITION: VECTOR_3 = [0, 0.8, 0];
+const DEFAULT_SCALE = 1;
+type Props = {
+  triggerReset: boolean;
+};
 
-const Snowball = () => {
+const Snowball = ({ triggerReset }: Props) => {
   const snowballRef = useRef<Mesh>();
 
   const [isDragging, setIsDragging] = useState(false); // 드래그 상태
   const lastPointerPos = useRef(DEFAULT_X_Z);
 
-  const [scale, setScale] = useState(1); // 눈덩이 크기 상태
+  const [scale, setScale] = useState(DEFAULT_SCALE); // 눈덩이 크기 상태
 
   const [velocity, setVelocity] = useState(DEFAULT_X_Z); // 드래그 속도 (x, z)
-  const [position, setPosition] = useState<[number, number, number]>([0, 0.8, 0]); // 눈덩이 위치
+  const [position, setPosition] = useState<VECTOR_3>([0, 0.8, 0]); // 눈덩이 위치
   const { scene } = useGLTF(snowball);
 
+  const resetSnowball = () => {
+    lastPointerPos.current = DEFAULT_X_Z;
+    setVelocity(DEFAULT_X_Z);
+    setPosition(DEFAULT_POSITION);
+    setScale(DEFAULT_SCALE);
+  };
+
+  useEffect(() => resetSnowball, [triggerReset]);
   const handleDragStart = (event: ThreeEvent<PointerEvent>) => {
     setIsDragging(true);
 
@@ -44,7 +60,7 @@ const Snowball = () => {
       setVelocity([deltaX * 0.02, deltaZ * 0.02]);
 
       const moveAmount = Math.abs(deltaX) + Math.abs(deltaZ);
-      setScale((prev) => prev + moveAmount * 0.0002);
+      setScale((prev) => prev + moveAmount * 0.0001);
 
       setQuaternion([deltaZ, 0, -deltaX], moveAmount * 0.005, snowballRef.current);
     }
@@ -127,35 +143,48 @@ const Snowball = () => {
 
 const SnowBallPage = () => {
   const texture = useLoader(TextureLoader, snowSurface);
+  const [triggerReset, setTriggerReset] = useState(false); // 값을 바꿀 때마다 초기화한다
 
   return (
-    <Canvas
-      shadows={{ type: PCFSoftShadowMap }}
-      camera={{ position: [0, 5, 5.5], fov: 50 }}
-      style={{ height: '100vh', width: '100vw' }}>
-      <ambientLight intensity={0.4} />
-      <directionalLight
-        shadow-camera-top={25}
-        shadow-camera-bottom={-25}
-        shadow-camera-left={-25}
-        shadow-camera-right={25}
-        shadow-mapSize={2048}
-        castShadow
-        position={[-1, 100, 10]}
-        intensity={1.5}
-      />
-      <ambientLight intensity={0.3} />
-      <Snowball />
-      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
-        <planeGeometry args={[100, 100]} />
-        <meshStandardMaterial map={texture} />
-      </mesh>
-      <axesHelper />
-      <CameraRig />
-      {/* <EffectComposer>
+    <>
+      <Canvas
+        shadows={{ type: PCFSoftShadowMap }}
+        camera={{ position: [0, 5, 5.5], fov: 50 }}
+        style={{ height: '100vh', width: '100vw' }}>
+        <ambientLight intensity={0.4} />
+        <directionalLight
+          shadow-camera-top={25}
+          shadow-camera-bottom={-25}
+          shadow-camera-left={-25}
+          shadow-camera-right={25}
+          shadow-mapSize={2048}
+          castShadow
+          position={[-1, 100, 10]}
+          intensity={1.5}
+        />
+        <ambientLight intensity={0.3} />
+        <Snowball triggerReset={triggerReset} />
+        <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
+          <planeGeometry args={[100, 100]} />
+          <meshStandardMaterial map={texture} />
+        </mesh>
+        <axesHelper />
+        <CameraRig />
+        {/* <EffectComposer>
         <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.1} intensity={0.8} />
       </EffectComposer> */}
-    </Canvas>
+      </Canvas>
+      <div
+        css={css`
+          position: absolute;
+          right: 0;
+          bottom: 0;
+
+          margin: 16px;
+        `}>
+        <Button onClick={() => setTriggerReset((p) => !p)}>눈덩이 초기화</Button>
+      </div>
+    </>
   );
 };
 
