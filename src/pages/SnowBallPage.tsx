@@ -18,7 +18,7 @@ const SnowBallPage = () => {
         shadows={{ type: PCFSoftShadowMap }}
         camera={{ position: [0, 5, 5.5], fov: 50 }}
         style={{ height: '100vh', width: '100vw' }}>
-        <ambientLight intensity={0.2} /> {/* 주변 조명을 어둡게 */}
+        <ambientLight intensity={0.2} />
         <directionalLight
           shadow-camera-top={25}
           shadow-camera-bottom={-25}
@@ -30,7 +30,6 @@ const SnowBallPage = () => {
           intensity={1.2}
           color={'#84a4e5'}
         />
-        {/* 주변을 은은하게 비추는 조명 */}
         <pointLight position={[0, 30, 0]} intensity={10} color={'#f88a72'} distance={100} decay={0.8} />
         <fog attach='fog' args={['#0a0a1a', 10, 80]} />
         <Snowball triggerReset={triggerReset} />
