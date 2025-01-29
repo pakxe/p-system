@@ -1,9 +1,9 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
-import App from './App';
 import AssemblyPage from './pages/AssemblyPage/AssemblyPage';
 import { ModalProvider } from './hooks/useModal';
 import AssemblyDeskPage from './pages/AssemblyPage/AssemblyDeskPage';
-import SnowBallPage from './pages/SnowBallPage';
+import SnoSnowPage from './pages/SnoSnowPage/SnoSnowPage';
+import SystemPage from './pages/SystemPage';
 
 const router = createBrowserRouter([
   {
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <App />,
+        element: <SystemPage />,
       },
       {
         path: '/assembly',
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/snosnow',
-        element: <SnowBallPage />,
+        element: <SnoSnowPage />,
       },
     ],
   },

@@ -3,15 +3,16 @@ import { Canvas } from '@react-three/fiber';
 import { css } from '@emotion/react';
 import * as THREE from 'three';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
-import Planet from './components/Planet';
-import CameraMover from './components/CameraMover';
-import { system } from './datas/system';
-import Lights from './components/Lights';
-import SpaceBackground from './components/SpaceBackground';
-import Star from './components/Star';
+import Lights from '../components/Lights';
+import SpaceBackground from '../components/SpaceBackground';
+import ExpandingCircle from '../components/ExpandingCircle';
+import { system } from '../datas/system';
+import Planet from '../components/Planet';
+import Star from '../components/Star';
+import CameraMover from '../components/CameraMover';
+import Button from '../components/Button';
 
-// App 컴포넌트
-function App() {
+function SystemPage() {
   const [selectedSystemObjectRef, setSelectedSystemObjectRef] = useState<React.RefObject<THREE.Mesh> | null>(null);
   const [targetName, setTargetName] = useState<string | null>(null); // 클릭된 행성 이름
   const [isExplore, setIsExplore] = useState(false);
@@ -67,28 +68,13 @@ function App() {
             />
           </group>
         ))}
-        {/* <mesh ref={ref}>
-          <sphereGeometry args={[3, 32, 32]} />
-          <meshStandardMaterial
-            emissive='#ffffff' // 발광 색상
-            emissiveIntensity={0.2} // 발광 강도
-          />
-        </mesh> */}
+
         <CameraMover isExplore={isExplore} selectedSystemObjectRef={selectedSystemObjectRef} />
         <EffectComposer autoClear={false}>
-          <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.1} intensity={0.6} />
-          <Bloom kernelSize={5} luminanceThreshold={0} luminanceSmoothing={0} intensity={1} />
-          {/* <Outline
-            // selection={ref}
-            visibleEdgeColor={0xfaa000} // the color of visible edges
-            edgeThickness={1}
-            edgeStrength={10}
-            blur={true}
-            kernelSize={4}
-          /> */}
+          <Bloom kernelSize={4} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.2} />
         </EffectComposer>
       </Canvas>
-      <button
+      <Button
         css={css`
           position: absolute;
           top: 20px;
@@ -98,9 +84,9 @@ function App() {
         `}
         onClick={clearSelectedState}>
         system으로 돌아가기
-      </button>
+      </Button>
     </div>
   );
 }
 
-export default App;
+export default SystemPage;
