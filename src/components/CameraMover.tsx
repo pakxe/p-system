@@ -71,7 +71,7 @@ function CameraMover({ selectedSystemObjectRef, isExplore }: Props) {
     }
 
     // 카메라 위치를 타겟 궤도로 부드럽게 이동
-    const targetVector = new Vector3(targetPosition.x, targetPosition.y + 3, targetPosition.z + 10);
+    const targetVector = new Vector3(targetPosition.x, targetPosition.y + 2, targetPosition.z + 6);
     currentPos.current.lerp(targetVector, lerpSpeed);
     camera.position.copy(currentPos.current);
 
