@@ -26,18 +26,11 @@ const Star = ({ onClick, name, modelName, axialTilt, rotationSpeed, objectRadius
         onClick={() => {
           if (onClick) onClick(planetRef, name);
         }}>
-        {modelName ? (
-          // <Model name={modelName} />
-          <Model name='first_planet' />
-        ) : (
-          <>
-            <sphereGeometry args={[objectRadius, 32, 32]} />
-            <meshStandardMaterial
-              emissive='#ffffff' // 발광 색상
-              emissiveIntensity={0.2} // 발광 강도
-            />
-          </>
-        )}
+        <sphereGeometry args={[objectRadius, 32, 32]} />
+        <meshStandardMaterial
+          emissive='#f56a00' // 발광 색상
+          emissiveIntensity={0.2} // 발광 강도
+        />
       </mesh>
     </group>
   );

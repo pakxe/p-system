@@ -12,7 +12,7 @@ function CameraMover({ selectedSystemObjectRef, isExplore }: Props) {
   const currentPos = useRef(camera.position.clone());
   const currentLookAt = useRef(new Vector3(0, 0, 0)); // 카메라 현재 시선
   const lerpSpeed = 0.04; // 부드러운 이동 속도
-  const solarSystemViewPosition = new Vector3(0, 14, 14); // 태양계를 보는 위치 (적절히 조정 가능)
+  const solarSystemViewPosition = new Vector3(0, 7, 10); // 태양계를 보는 위치 (적절히 조정 가능)
   const solarSystemLookAt = new Vector3(0, 0, 0); // 태양계를 중심으로 시선 고정
 
   useEffect(() => {
