@@ -57,7 +57,7 @@ const Snowball = ({ triggerReset }: Props) => {
       const moveAmount = Math.abs(deltaX) + Math.abs(deltaZ);
       setScale((prev) => prev + moveAmount * 0.0001);
 
-      setQuaternion([deltaZ, 0, -deltaX], moveAmount * 0.005, snowballRef.current);
+      setQuaternion([deltaZ, 0, -deltaX], (moveAmount / scale) * 0.005, snowballRef.current);
     }
   };
 
@@ -81,7 +81,7 @@ const Snowball = ({ triggerReset }: Props) => {
         setVelocity(DEFAULT_X_Z);
       }
 
-      setQuaternion([deltaZ, 0, -deltaX], moveAmount, snowballRef.current);
+      setQuaternion([deltaZ, 0, -deltaX], (moveAmount / scale) * 0.005, snowballRef.current);
     }
   });
 
