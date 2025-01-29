@@ -1,5 +1,5 @@
 import { RefObject, useRef, useState } from 'react';
-import { Mesh, Vector3 } from 'three';
+import { Mesh } from 'three';
 import { Html } from '@react-three/drei';
 import Orbit from './Orbit';
 import { TPlanet } from '../types';
@@ -9,7 +9,7 @@ import useRotation from '../hooks/useRotation';
 import useOrbit from '../hooks/useOrbit';
 import Satellite from './Satellite';
 import Model from './Model';
-import { useNavigate } from 'react-router-dom';
+import { ThemeProvider, useTheme } from '@emotion/react';
 
 type Props = TPlanet & {
   targetName?: string | null;
@@ -39,7 +39,7 @@ function Planet({
   path,
 }: Props) {
   const [hovered, setHover] = useState(false);
-
+  const theme = useTheme();
   const planetRef = useRef<Mesh>(null);
   const modalRef = useRef<Mesh>(null);
 
@@ -93,18 +93,20 @@ function Planet({
       {targetName === name && (
         <group>
           <mesh ref={modalRef} rotation={[0.25, -Math.PI / 4, 0]}>
-            <Html>
-              <SystemObjectInfoModal
-                description={description}
-                path={path}
-                name={name}
-                planetMeshRef={planetRef}
-                onExplore={() => {
-                  if (onExplore) {
-                    onExplore();
-                  }
-                }}
-              />
+            <Html prepend={false}>
+              <ThemeProvider theme={theme}>
+                <SystemObjectInfoModal
+                  description={description}
+                  path={path}
+                  name={name}
+                  planetMeshRef={planetRef}
+                  onExplore={() => {
+                    if (onExplore) {
+                      onExplore();
+                    }
+                  }}
+                />
+              </ThemeProvider>
             </Html>
           </mesh>
         </group>

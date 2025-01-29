@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, keyframes } from '@emotion/react';
+import Z_INDEX from '../constants/zIndex';
 
 const circleExpandAnimation = keyframes`
   0% {
@@ -21,7 +22,7 @@ interface ExpandingCircleProps {
 const ExpandingCircle: React.FC<ExpandingCircleProps> = ({ color }) => {
   const circleStyle = css`
     position: absolute;
-    z-index: 1;
+    z-index: ${Z_INDEX.DISPLAY_COVER};
 
     width: 1px; /* 초기 크기 1px */
     height: 1px; /* 초기 크기 1px */

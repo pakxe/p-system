@@ -18,6 +18,7 @@ export const system: System = {
   planets: [
     {
       name: '익명이',
+      description: '아직 준비되지 않았습니다.',
       mainColor: 'lightGreen',
       objectRadius: 0.3,
       orbitalRadius: 2.5,
@@ -29,7 +30,7 @@ export const system: System = {
       name: '빙글뱅글 조리립 플래닛',
       description: '3d 조립 설명서',
       path: '/assembly',
-      fileName: 'assembly',
+      fileName: 'assembly_planet',
       mainColor: 'royalblue',
       objectRadius: 0.5,
       orbitalRadius: 3.5,
@@ -40,7 +41,8 @@ export const system: System = {
     {
       name: '눈눈이 플래닛',
       description: '데굴데굴 눈덩이 굴리기',
-      fileName: 'snosnow',
+      path: '/snosnow',
+      fileName: 'snosnow_planet',
       mainColor: 'lightBlue',
       objectRadius: 0.5,
       orbitalRadius: 5,

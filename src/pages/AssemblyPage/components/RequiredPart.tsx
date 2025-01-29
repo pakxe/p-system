@@ -1,6 +1,5 @@
 import { Canvas } from '@react-three/fiber';
 import useDuplicatedModel from '../../../hooks/useDuplicatedModel';
-import * as THREE from 'three';
 import SpotCamera from './SpotCamera';
 import { EffectComposer, Outline } from '@react-three/postprocessing';
 import { useState } from 'react';
@@ -9,6 +8,7 @@ import calcModelSize from '../../../utils/calcModelSize';
 import { css, useTheme } from '@emotion/react';
 import Text from '../../../components/Text';
 import calcModelCenter from '../../../utils/calcModelCenter';
+import Z_INDEX from '../../../constants/zIndex';
 
 type Props = {
   name: string;
@@ -55,7 +55,7 @@ const RequiredPart = ({ name }: Props) => {
             padding: 8px;
             border-radius: 8px;
 
-            z-index: 10;
+            z-index: ${Z_INDEX.FLOATING_ON_CANVAS};
           `}>
           {name}
         </Text>

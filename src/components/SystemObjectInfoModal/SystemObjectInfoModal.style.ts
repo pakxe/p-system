@@ -1,4 +1,5 @@
 import { css, keyframes } from '@emotion/react';
+import { Theme } from '@emotion/react/dist/declarations/src';
 
 const zeroGravityShakeAnimation = keyframes`
   0% {
@@ -47,10 +48,10 @@ const fadeInAnimation = keyframes`
   }
   `;
 
-const modalContainerStyle = css`
+const modalContainerStyle = (theme: Theme) => css`
   padding: 16px;
   font-size: 14px;
-  background-color: #ffffffd6;
+  background-color: ${theme.colors.floatWhite};
   border-radius: 10px;
   cursor: pointer;
   width: 300px;
