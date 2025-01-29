@@ -44,7 +44,7 @@ const StepInfo = ({ step }: Props) => {
         {step.title}
       </Text>
       <Text color='white'>{step.description}</Text>
-      <Text color='primary'>{step?.caution}</Text>
+      {step?.caution && <Text color='caution'>⚠️ {step?.caution}</Text>}
 
       <RequiredPartList infos={getPartCount(step.requiredParts)} />
     </div>
