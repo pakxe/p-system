@@ -1,94 +1,160 @@
-import { OrbitControls, Sky } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
-import Part from './components/Part';
-import { useState } from 'react';
-import desk from '../../datas/desk';
-import { css } from '@emotion/react';
-import StepCamera from './components/StepCamera';
-import PreloadModelsWithProgress from '../../components/PreloadModelsWithProgress';
+import { css, keyframes, useTheme } from '@emotion/react';
 import useCountInRange from '../../hooks/useCountInRange';
+import Text from '../../components/Text';
+import Button from '../../components/Button';
+import { useNavigate } from 'react-router-dom';
+import desk from '../../datas/desk';
+import StepInfo from './components/StepInfo';
+import PreloadModelsWithProgress from '../../components/PreloadModelsWithProgress';
+import { useState } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { ASSEMBLY_LANDING } from '../../datas/assemblyLanding';
 
+const animation = keyframes`
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+`;
 const AssemblyPage = () => {
-  const [triggerMove, setTriggerMove] = useState(false);
-  const { count: curStep, increase, decrease } = useCountInRange({ min: 0, max: desk.length - 1 });
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const { count: step, increase, decrease } = useCountInRange({ min: 0, max: ASSEMBLY_LANDING.length - 1 });
   const [isLoaded, setIsLoaded] = useState(false);
-
+  const [isAssembled, setIsAssembled] = useState(false);
   const handleMove = () => {
-    setTriggerMove((p) => !p);
+    setIsAssembled((p) => !p);
   };
-
-  const activeSteps = desk.filter((step) => step.id <= curStep);
-
   return (
-    <div
-      css={css`
-        width: 100vw;
-        height: 100vh;
-      `}>
-      <Canvas>
-        <ambientLight intensity={1} />
-        <directionalLight position={[-10, 10, 0]} intensity={2} />
-        <Sky />
-
-        <PreloadModelsWithProgress
-          setter={() => setIsLoaded(true)}
-          names={desk.flatMap((step) => step.requiredParts.map((part) => part.name))}
-        />
-
-        {isLoaded &&
-          activeSteps.map((step) =>
-            step.requiredParts.map((part) => (
-              <Part
-                key={part.id}
-                name={part.name}
-                position={part.position}
-                targetPosition={part.targetPosition}
-                isMoved={step.id < curStep ? true : triggerMove}
-                rotation={part.rotation}
-                direction={part.direction}
-                length={part.length}
-              />
-            )),
-          )}
-
-        <StepCamera cameraPosition={desk[curStep].cameraInfo.position} />
-      </Canvas>
+    <>
       <div
         css={css`
-          position: absolute;
-          top: 0;
-          left: 0;
-          padding: 10px;
+          background-color: ${theme.colors.primary};
+
+          width: 100vw;
+          height: 100vh;
+
+          background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+          background-size: 400% 400%;
+          animation: ${animation} 15s ease;
 
           display: flex;
-          flex-direction: column;
-
-          gap: 10px;
+          justify-content: center;
+          align-items: center;
         `}>
-        <button
-          onClick={() => {
-            decrease();
-            setTriggerMove(false);
-          }}>
-          prev
-        </button>
-        <button
-          onClick={() => {
-            increase();
-            setTriggerMove(false);
-          }}>
-          next
-        </button>
-        <button onClick={handleMove}>assembly</button>
-        <div
-          css={css`
-            position: absolute;
-            padding: 10px;
-          `}>
-          {}
-        </div>
+        {!isLoaded && (
+          <Canvas>
+            <PreloadModelsWithProgress
+              setter={() => setIsLoaded(true)}
+              names={desk.flatMap((step) => step.requiredParts.map((part) => part.name))}
+            />
+          </Canvas>
+        )}
+
+        {isLoaded && (
+          <>
+            {step >= 1 && step < 3 && (
+              <div
+                css={css`
+                  position: absolute;
+                  left: 0;
+                  top: 0;
+
+                  display: flex;
+                  flex-direction: column;
+                  padding: 10px;
+                  gap: 8px;
+                `}>
+                <Button>1</Button>
+                <Button>2</Button>
+                <Button>3</Button>
+              </div>
+            )}
+            {step === 2 && <StepInfo step={desk[2]} />}
+            {step === 3 && (
+              <div
+                css={css`
+                  position: absolute;
+                  bottom: 0;
+                  right: 0;
+                  padding: 10px;
+
+                  display: flex;
+                  flex-direction: column;
+
+                  align-items: end;
+
+                  gap: 10px;
+                `}>
+                <Button onClick={handleMove}>{isAssembled ? '해체하기' : '조립하기'}</Button>
+                <div
+                  css={css`
+                    display: flex;
+                    gap: 16px;
+                  `}>
+                  <Button disabled={true} onClick={() => {}}>
+                    이전 스텝으로
+                  </Button>
+                  <Button onClick={() => {}}>다음 스텝으로</Button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {isLoaded && (
+          <div
+            css={css`
+              background-color: ${theme.colors.floatHighlight};
+
+              width: 60%;
+              height: 300px;
+
+              border-radius: 16px;
+
+              padding: 32px;
+
+              display: flex;
+              flex-direction: column;
+
+              justify-content: space-between;
+              align-items: center;
+            `}>
+            <div>
+              <Text color='white' size={24}>
+                {ASSEMBLY_LANDING[step].title}
+              </Text>
+              <Text color='white' size={16}>
+                {ASSEMBLY_LANDING[step].description}
+              </Text>
+            </div>
+            <div
+              css={css`
+                display: flex;
+                gap: 16px;
+
+                width: 100%;
+              `}>
+              {step !== 0 && (
+                <Button fullWidth onClick={decrease}>
+                  이전
+                </Button>
+              )}
+              <Button
+                fullWidth
+                onClick={step === ASSEMBLY_LANDING.length - 1 ? () => (location.href = '/assembly/desk') : increase}>
+                {step === ASSEMBLY_LANDING.length - 1 ? '시작하기' : '다음'}
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 
