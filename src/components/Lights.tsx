@@ -1,8 +1,8 @@
 const Lights = () => {
   return (
     <>
-      <ambientLight intensity={1} /> {/* 환경광 */}
-      <pointLight position={[1, 1, 1]} intensity={100} color='white' distance={500} power={250} decay={0.5} />
+      <ambientLight intensity={1} />
+      <pointLight position={[1, 1, 1]} intensity={4} color='white' distance={100} power={100} decay={0.2} />
       <hemisphereLight intensity={0.5} />
     </>
   );
